@@ -13,7 +13,7 @@
 
 
 
-<title>正月十五记 | LLTTH&#39;blog</title>
+<title>GW-FPGA初体验 | LLTTH&#39;blog</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">正月十五记</h1>
+            <h1 class="post-title">GW-FPGA初体验</h1>
             
                 <div class="post-meta">
                     
@@ -242,14 +242,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">February 12, 2025&nbsp;&nbsp;21:24:20</a>
+                        Date: <a href="#">February 13, 2025&nbsp;&nbsp;18:40:49</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+                                <a href="/categories/Digital/">Digital</a>
                             
                         </span>
                     
@@ -258,17 +258,39 @@
         </header>
 
         <div class="post-content">
-            <h2 id="今天"><a href="#今天" class="headerlink" title="今天"></a>今天</h2><p>今天是2025蛇年正月十五，今年没有提前回学校，在家过了一个完整的年。</p>
-<p>鞭炮响起的时候，我看见火光在地面上快速地闪现，仿佛前一个炮仗还没响完，下一个就开始引燃。</p>
-<p>烟花升上天空的时候，我看到绚烂的火光散去后，是有颜色的烟尘。拿出手机想要记录一下这一年或许只能见到一次的烟火，却没对上焦。但我还是记录了下来，正所谓妙手偶得，没对上焦也有它的韵味所在。</p>
-<h2 id="过去"><a href="#过去" class="headerlink" title="过去"></a>过去</h2><p>我记得小时候喜欢玩王者荣耀，每到过年，就不受限制地打游戏，到初四初五的时候眼睛都要瞎了。</p>
-<p>上初三那年的正月十五，第二天就要开学，而我的数学作业还没写完。那天我很焦急地想回家，但是爹妈当时出去了，我自己抱着手机在家等着。内心很焦急，又没网，只能打打王者荣耀单机的墨家机关道。后来回家后，因为爸妈给弟弟洗澡要开暖风，家里跳闸了，我只能借着手机的光偷摸地写作业。好在最后平安无事。</p>
-<p>后来的正月十五就没有特别深的印象了。虽然高中的每个正月十五都没有在学校，但没有什么能让我印象深刻的事情。</p>
-<p>去年的十五，学校已经开学，大晚上我在北食堂一楼草草地吃了晚饭。那天我才知道，元宵和汤圆不是一个东西。</p>
-<h2 id="未来"><a href="#未来" class="headerlink" title="未来"></a>未来</h2><p>每年都有不同的感悟。今年我在学业这方面有了很多的想法，包括未来想去的方向，自己应该干什么，未来找工作的计划。</p>
-<p>明年过年的时候，心里应该比今年轻松。那时候至少保研考研都成了定数，无论去哪儿，都是权衡后的选择。我当然想考top2，原因挺复杂的，名校情结也有，想让家里人更为我感到骄傲也有，以及更多的私心，我还是想留在北京，或许能够延续一些故事。</p>
-<p>读了研就不轻松了啊，更多的科研压力，以及就业压力。</p>
-<p>希望明年的这个时候，能开心一点吧。</p>
+            <h2 id="工程参数"><a href="#工程参数" class="headerlink" title="工程参数"></a>工程参数</h2><p>记录一下逻辑派的参数：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>实际参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Series</strong></td>
+<td>GW2A</td>
+</tr>
+<tr>
+<td><strong>Package</strong></td>
+<td>PBGA256</td>
+</tr>
+<tr>
+<td><strong>Device</strong></td>
+<td>GW2A-18</td>
+</tr>
+<tr>
+<td><strong>Speed</strong></td>
+<td>C8&#x2F;I7</td>
+</tr>
+<tr>
+<td><strong>Device Version</strong></td>
+<td>C</td>
+</tr>
+</tbody></table>
+<h2 id="工程流程"><a href="#工程流程" class="headerlink" title="工程流程"></a>工程流程</h2><h3 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h3><p><img src="/2025/02/11/Chapter2/%E9%AA%8C/code.png" alt="code"></p>
+<h3 id="仿真"><a href="#仿真" class="headerlink" title="仿真"></a>仿真</h3><p><img src="/2025/02/11/Chapter2/%E9%AA%8C/synthesize.png" alt="synthesize"></p>
+<h3 id="I-O约束"><a href="#I-O约束" class="headerlink" title="I&#x2F;O约束"></a>I&#x2F;O约束</h3><p><img src="/2025/02/11/Chapter2/%E9%AA%8C/floor.png" alt="FloorPlanner"><br>进入FloorPlanner选项，然后点击左下角I&#x2F;O选项卡：<br><img src="/2025/02/11/Chapter2/%E9%AA%8C/IO.png" alt="IO"><br>约束好后回到主界面，运行<code>Place &amp; Route</code>进行布局布线。</p>
+<h3 id="程序下载"><a href="#程序下载" class="headerlink" title="程序下载"></a>程序下载</h3><p>运行主界面的<code>Programmer</code>即可：<br><img src="/2025/02/11/Chapter2/%E9%AA%8C/pro.png" alt="programmer"></p>
 
         </div>
 
@@ -297,11 +319,9 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/%E5%81%87%E6%9C%9F/"># 假期</a>
+                        <a href="/tags/learning/"># learning</a>
                     
-                        <a href="/tags/%E7%94%9F%E6%B4%BB/"># 生活</a>
-                    
-                        <a href="/tags/%E8%BF%87%E5%B9%B4/"># 过年</a>
+                        <a href="/tags/FPGA/"># FPGA</a>
                     
                         
                 </span>
@@ -314,10 +334,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2025/02/13/GW-FPGA%E5%88%9D%E4%BD%93%E9%AA%8C/">GW-FPGA初体验</a>
             
-            
-            <a class="next" rel="next" href="/2025/02/11/PA0/">PA0</a>
+            <a class="next" rel="next" href="/2025/02/12/%E6%AD%A3%E6%9C%88%E5%8D%81%E4%BA%94%E8%AE%B0/">正月十五记</a>
             
         </section>
 
