@@ -13,7 +13,7 @@
 
 
 
-<title>ADC-some-question | LLTTH&#39;blog</title>
+<title>Excerpts-Spectra_of_quantized_signals | LLTTH&#39;blog</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">ADC-some-question</h1>
+            <h1 class="post-title">Excerpts-Spectra_of_quantized_signals</h1>
             
                 <div class="post-meta">
                     
@@ -242,7 +242,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">February 27, 2025&nbsp;&nbsp;20:30:36</a>
+                        Date: <a href="#">March 1, 2025&nbsp;&nbsp;15:03:03</a>
                         </span>
                     
                     
@@ -258,16 +258,13 @@
         </header>
 
         <div class="post-content">
-            <h2 id="1-量化噪声带来的谐波"><a href="#1-量化噪声带来的谐波" class="headerlink" title="1.量化噪声带来的谐波"></a>1.量化噪声带来的谐波</h2><p>之前看ADC测试时，两本书中都强调了一个表达式：<br>$$\frac{f_{in}}{f_s}&#x3D;\frac{M}{N}$$<br>其中M必须是素数，否则在输出中会有重复的图样。</p>
-<p>如果做个纠正，应该满足：M与N互素。这个条件使得FFT输入序列不是周期的。关于这个问题的透彻理解实际上来自这篇文章：<a target="_blank" rel="noopener" href="https://www3.advantest.com/documents/11348/7f5f00bb-f5f0-41da-b154-fc1d974ad201">DSP-Based Testing – Fundamentals 7 Coherent Condition</a></p>
-<p>对“重复图案”这点，我其实是理解的。如果FFT输入序列是周期的，量化噪声就是周期的，丧失了随机性，得到的结果也就是不准确的。</p>
-<p>但是关于“谐波”，我之前一直不理解。上过的信号课程告诉我，只要相干采样就不会有什么问题。我自己拿matlab写了个FFT程序仿了一下，也没问题，输出是一根干净的谱线，连噪底都没有。</p>
-<p>但这样实际上是忽略了量化噪声。如果在仿真生成FFT输入数据的时候取个整，或许就能得到符合实际的结果。</p>
-<p><strong>量化噪声也是周期的。</strong> 这句话是问题关键所在。对应频率以及谐波处就会有谱线。下面简单写个matlab程序跑一下。</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% quantization error periodic</span></span><br><span class="line">clear;</span><br><span class="line">close all;</span><br><span class="line">clc;</span><br><span class="line"></span><br><span class="line"><span class="comment">%% </span></span><br><span class="line">f_s  = <span class="number">512</span>;<span class="comment">%sampling frequency</span></span><br><span class="line">f_in = <span class="number">64</span>;<span class="comment">%input frequency</span></span><br><span class="line"></span><br><span class="line">n = <span class="number">0</span>:<span class="number">511</span>;</span><br><span class="line"></span><br><span class="line">T = <span class="number">1</span>/f_s;</span><br><span class="line">t = n * T;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">y = <span class="built_in">round</span>(<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f_in*t));</span><br><span class="line"></span><br><span class="line">Y = <span class="built_in">abs</span>(fft(y));</span><br><span class="line"></span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">stem(t(<span class="number">1</span>:<span class="number">64</span>),y(<span class="number">1</span>:<span class="number">64</span>));</span><br><span class="line">xlabel(<span class="string">&quot;t&quot;</span>);</span><br><span class="line">ylabel(<span class="string">&quot;Magnitude&quot;</span>);</span><br><span class="line">title(<span class="string">&quot;Sampled Data&quot;</span>);</span><br><span class="line">grid on;<span class="comment">% Time Domain</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">0</span>:<span class="number">255</span>,Y(<span class="number">1</span>:<span class="number">256</span>));</span><br><span class="line"></span><br><span class="line">xlabel(<span class="string">&quot;$f/Hz$&quot;</span>);</span><br><span class="line">ylabel(<span class="string">&quot;Magnitude&quot;</span>);</span><br><span class="line">title(<span class="string">&quot;FFT&quot;</span>);</span><br><span class="line">grid on;<span class="comment">%Freq Domain</span></span><br></pre></td></tr></table></figure>
-
-<p>下面是运行结果：<br><img src="/2025/02/11/Chapter2/question/quantization%20error.png" alt="error"></p>
-<p>可以看到有一个三次谐波。</p>
+            <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p>看ADC测试，在量化噪声那一块儿遇到了一个问题-输入正弦波时，为什么可以把输入信号看作均匀分布的？</p>
+<p>之前写出来pdf，是一个<em>bathtube</em>，我认为可以近似地看成均匀的，只有两侧比较不均匀。但看ADI-MT001中对这个问题似乎有所说明，在一篇上个世纪的文章中提到过，那就不妨看看实际推导。</p>
+<h2 id="部分译文"><a href="#部分译文" class="headerlink" title="部分译文"></a>部分译文</h2><p>语音信号的幅度量化是最近的一项创新。这里我们不允许从连续的幅度域中选取，而是从确定的离散值中选取。这意味着，原始的语音信号会被从可用的离散集合中亿最小误差基础选择的固定值重建的波形取代。显然如果我们让量化值之间的间隔足够近，可以让量化后的波形和原始信号用耳朵分辨不出。幅度量化的目的是，抑制传输介质中的干扰影响。通过使用精密的接收仪器，我们能够恢复接收到的值，而不会受到叠加干扰的任何影响，只要干扰不超过相邻步长的一半。</p>
+<p>通过幅度和时间上量化的结合，我们可以为语音信号编码，因为现在的传输能够在每个离散时间间隔内发送离散的幅度。通过使用二进制表示每个离散的信号幅度，其中只有0和1被使用，这个方法获得了克服干扰的最大优势。十进制中的4在二进制中表示为100，8是1000，16是10000，等等。通常情况下，如果我们在二进制系统中有N位数字位，那么我们可以构建$2^N$个不同的数字。如果需要的离散幅度不超过$2^N$个，那么在每个采样间隔内，可以通过N个开关脉冲的序列来发送完整的信息…</p>
+<hr>
+<p>为了确定用来传输语音信号需要的量化步长数量，我们需要知道失真和步长之间的关系。这正是本文的主题。我们把这个问题分为两部分：仅仅是幅度上的量化；时间量化和幅度量化的结合。前者可以使用简单的“阶梯转换器”处理，是有着图1中输入输出曲线的设备。<br><img src="/figure1.png" alt="Figure1"><br>阶梯转换器上的信号被分为不同的电压切片，所有的在切片中止的正负一半步长以内的信号，都被这个中值所替代。当输入是一个光滑变化的时间函数时，对应输出是图2中的样子：<br><img src="/figure2.png" alt="Figure2"><br>如果有大量的小步长，那么误差信号类似于一系列斜率不同的直线，但几乎一直在正负一半步长的间隔内延申。紧密的相隔步长的极限情况，让我们能够相当简单地推导出均方误差意义上相当接近的值，稍后将会证明在大多数相当重要的情形下是足够精准的。如果$E_0$是一个步长，s是斜率，那么典型的误差线表示为：<br>$$\epsilon&#x3D;st,-\frac{E_0}{2s}&lt;t&lt;\frac{E_0}{2s}$$<br>这里$\epsilon$是误差，t是相对于中点的时间，那么均方误差就是：<br>$$\epsilon^2&#x3D;\frac{E_0^2}{12}$$<br>积分过程略去。</p>
+<p>并不是所有的失真都落在信号频带里面。失真可能是非线性特性带来的。高阶调制得到的结果可以通过滤波除去。因此，计算误差波形的频谱就十分重要了。下一个部分我们将会进行</p>
 
         </div>
 
@@ -298,6 +295,8 @@
                     
                         <a href="/tags/learning/"># learning</a>
                     
+                        <a href="/tags/paper/"># paper</a>
+                    
                         
                 </span>
             </div>
@@ -309,10 +308,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2025/03/01/Excerpts-Spectra-of-quantized-signals/">Excerpts-Spectra_of_quantized_signals</a>
             
-            
-            <a class="next" rel="next" href="/2025/02/23/2025-2-23%E5%A4%9C/">2025/2/23夜</a>
+            <a class="next" rel="next" href="/2025/02/27/ADC-some-question/">ADC-some-question</a>
             
         </section>
 
