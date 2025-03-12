@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>Makefile | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Makefile</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 15, 2025&nbsp;&nbsp;2:29:15</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/ysyx/">ysyx</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>B站链接：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1tyWWeeEpp/?spm_id_from=333.337.search-card.all.click&vd_source=e99e5d6d2e9c53c73a6b5ebf92bfc6e4">20分钟速通Makefile</a></p>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>在软件开发中，“构建”（Build）是指将文件转化成可执行文件的过程。</p>
+<p>需要借助自动化的构建工具完成这个过程。</p>
+<p>对于<code>main.c</code>文件，使用<code>gcc main.c -o hello</code>可以将这个文件编译为可执行文件<code>Hello</code>（前提是一共只需要这一个文件就能进行编译）。</p>
+<p>如果这个文件需要<code>message.h</code> <code>message.c</code> <code>main.c</code>三个文件，我们用Make工具来实现构建。</p>
+<p>Make通过读取<code>Makefile</code>中的规则来进行编译。这个工具主要用于C和C++项目的构建中。</p>
+<p><code>Makefile</code>中的格式：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">targer: dependencies</span></span><br><span class="line">    actions</span><br></pre></td></tr></table></figure>
+
+<p>整个过程有三件事：要生成什么文件，文件的依赖是什么，怎么生成这个文件。</p>
+<p>例如，上面所说的需要三个文件的文件，就可以在<code>Makefile</code>中这样写：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">hello: main.c message.c</span></span><br><span class="line">    gcc main.c message.c -o hello</span><br></pre></td></tr></table></figure>
+
+<p>首先要检查依赖文件是否更新，如有则会执行下面的命令。这时候输入<code>make</code>就会执行<code>Makefile</code>中的命令。</p>
+<p>如果依赖文件没有更新（对比目标文件和依赖文件的时间戳），会提醒不需更新，否则会检查更新然后重新编译。</p>
+<p>但这时，如果<code>main.c</code> <code>message.c</code>有一个更新，就会重新编译。更标准的写法是如下（把编译和链接分开）：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">hello: main.o message.o</span></span><br><span class="line">    gcc main.o message.o -o hello</span><br><span class="line"></span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">    gcc -c main.c</span><br><span class="line"></span><br><span class="line"><span class="section">message.o: message.c</span></span><br><span class="line">    gcc -c message.c</span><br></pre></td></tr></table></figure>
+
+<p>提高效率。<br>这样就会先编译两个<code>.c</code>文件。这样有需要修改源文件时候，只需要重新编译修改了的源文件，其他不需要重新编译。</p>
+<p>关于<strong>伪目标</strong>：只是一个标签，用于执行一些操作。</p>
+<p>举个例子，在<code>Makefile</code>文件末尾加上：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line"> rm -f *.o hello</span><br></pre></td></tr></table></figure>
+
+<p>然后如果执行<code>make clean</code>，就会执行这里的<code>rm</code>命令。</p>
+<p>但如果本地也有一个叫<code>clean</code>的文件，<code>make clean</code>这个命令就会失效。如果在文件首加上<code>.PHONY: clean</code>，Make就不会把clean当作文件名来处理。</p>
+<p>另一个常用的伪目标是<code>all</code>。如果只执行<code>make</code>命令，会只按照第一条规则运行，生成第一条规则对应的文件（如果其依赖文件中包有本条Makefile描述了其规则的文件，则这个依赖文件也会被生成）。按照这个规则，如果在伪目标<code>all</code>上面加入所有需要生成的文件，执行<code>make all</code>就能生成所有文件：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: hello world</span></span><br><span class="line">    echo succeed</span><br></pre></td></tr></table></figure>
+
+<p>这样，执行<code>make all</code>就会生成所有文件，然后打印提示语句。同时，如果只想生成其中一个文件，执行<code>make &lt;filename&gt;</code>即可。</p>
+<p>当然，中间文件<code>.o</code>也可以这样编译，根据文件名选择。只要是<code>Makefile</code>中定义的目标文件，都能按照这一系列规则进行。</p>
+<p>如果两个目标文件的依赖文件和生成规则是一样的，把它们写在一行即可：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello world: main.o meaasge.o</span><br><span class="line">    gcc main.o message.o -o <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>$@</code>代表目标文件。这个变量叫做<strong>自动变量</strong>。后面会讲解所有的自动变量。</p>
+<p>同时，<code>Makefile</code>中可以定义变量。如<code>targets = hello world</code>，然后需要输入<code>hello world</code>这两个目标文件的地方，直接输入<code>$(targets)</code>即可。通常会定义<code>targets</code>  <code>sources</code> <code>objects</code>这些变量。举个完整的例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean all</span></span><br><span class="line">CFLAGS = -Wall -g -O2</span><br><span class="line">targets = hello world</span><br><span class="line">sources = main.c message.c</span><br><span class="line">objects = main.o message.o</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(targets)</span></span></span><br><span class="line">    @echo <span class="string">&quot;all done&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(targets)</span>: <span class="variable">$(objects)</span></span><br><span class="line">    gcc <span class="variable">$(CFLAGS)</span> <span class="variable">$(objects)</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">    gcc <span class="variable">$(CFLAGS)</span> -c main.c</span><br><span class="line"></span><br><span class="line"><span class="section">message.o: message.c</span></span><br><span class="line">    gcc <span class="variable">$(CFLAGS)</span> -c message.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f *.o <span class="variable">$(targets)</span></span><br></pre></td></tr></table></figure>
+
+<p>下面给出自动变量：</p>
+<ul>
+<li><code>$@</code>：目标文件</li>
+<li><code>$&lt;</code>：第一个以来问及那</li>
+<li><code>$^</code>：所有的依赖文件</li>
+</ul>
+<p>根据自动变量，或许也能节省一下敲代码的时间。这里不再展开说。</p>
+<p>还可使用通配符来简化文件。比如想把所有<code>.c</code>文件转换成对应的<code>.o</code>文件，就可以再<code>Makefile</code>中写道：<code>%.o: %.c</code>，这样对应了所有的<code>.c</code>为依赖文件，转化成对应的<code>.o</code>文件。</p>
+<p>在命令行中，可以为<code>make</code>命令加上参数，除了之前说的指定文件等。如果你的<code>Makefile</code>名字不叫<code>Makefile</code>而叫<code>114514</code>，可以使用<code>make -f 114514</code>，指定需要哪个<code>Makefile</code>。在命令后面加上<code>-n</code>参数可以打印出将会执行的命令，但不会真正执行，可以在调试<code>Makefile</code>的时候使用。<code>-C</code>参数用于指定<code>Makefile</code>执行的目录。</p>
+<h2 id="CMake"><a href="#CMake" class="headerlink" title="CMake"></a>CMake</h2><p>很多时候我们不需要手动编写<code>Makefile</code>。<code>CMake</code>这个工具更加简单好用。</p>
+<p>建立一个<code>CMakelist.txt</code>，在第一行加上最小版本要求，然后加上project命令，设置源文件列表和生成可执行文件的命令，这样就完成了一个最简单的<code>CMake</code>文件，示意如下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(HelloWorld)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(SOURCES main.c <span class="keyword">message</span>.c)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(hello <span class="variable">$&#123;SOURCES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>运行命令<code>cmake</code>。这样，<code>CMake</code>会帮助我们自动生成<code>Makefile</code>文件，就不用自己去写咯。</p>
+<p><code>CMake</code>还有很多其他功能，这里不再展开。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/CS/"># CS</a>
+                    
+                        <a href="/tags/linux/"># linux</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/02/17/ADI-ADC-Testing-Static/">ADI-ADC-Testing-Static</a>
+            
+            
+            <a class="next" rel="next" href="/2025/02/13/GW-FPGA%E5%88%9D%E4%BD%93%E9%AA%8C/">GW-FPGA初体验</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
