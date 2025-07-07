@@ -13,7 +13,7 @@
 
 
 
-<title>Category: 随笔 | LLTTH&#39;blog</title>
+<title>早睡打卡帖 | LLTTH&#39;blog</title>
 
 
 
@@ -161,93 +161,153 @@
     }
 </script>
             <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">早睡打卡帖</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 7, 2025&nbsp;&nbsp;23:10:07</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Week1-25-7-7-25-7-13"><a href="#Week1-25-7-7-25-7-13" class="headerlink" title="Week1 25&#x2F;7&#x2F;7 - 25&#x2F;7&#x2F;13"></a>Week1 25&#x2F;7&#x2F;7 - 25&#x2F;7&#x2F;13</h2>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
                 
 
-
-    
-<div class="container">
-    <div class="post-wrap categories">
-        <h2 class="post-title">-&nbsp;Categories&nbsp;·&nbsp;随笔-</h2>
-    </div>
-    <div class="post-wrap archive">
-    
-    
+            </section>
         
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%94%9F%E6%B4%BB/"># 生活</a>
+                    
+                        <a href="/tags/%E5%B1%95%E6%9C%9B/"># 展望</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2025/05/12/WaveDrom-Tutorial/">WaveDrom-Tutorial</a>
+            
+        </section>
 
-        
-            <h3>2025</h3>
-        
 
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/07/07/%E6%97%A9%E7%9D%A1%E6%89%93%E5%8D%A1%E5%B8%96/">早睡打卡帖</a>
-            <span class="archive-item-date">July 7, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/05/10/%E4%B8%80%E4%BA%9B%E5%BC%82%E6%83%B3%E5%A4%A9%E5%BC%80/">一些异想天开</a>
-            <span class="archive-item-date">May 10, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/03/19/%E4%B8%93%E4%B8%9A%E7%9B%B8%E5%85%B3%E9%9A%8F%E7%AC%94/">专业相关</a>
-            <span class="archive-item-date">March 19, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/03/17/%E9%9A%8F%E7%AC%94/">随笔</a>
-            <span class="archive-item-date">March 17, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/03/08/week2%E5%91%A8%E6%9C%AB%E5%B0%8F%E8%AE%B0/">week2周末小记</a>
-            <span class="archive-item-date">March 8, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/02/23/2025-2-23%E5%A4%9C/">2025/2/23夜</a>
-            <span class="archive-item-date">February 23, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/02/17/%E4%B8%B4%E8%A1%8C%E5%89%8D%E8%AE%B0/">临行前记</a>
-            <span class="archive-item-date">February 17, 2025</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2025/02/12/%E6%AD%A3%E6%9C%88%E5%8D%81%E4%BA%94%E8%AE%B0/">正月十五记</a>
-            <span class="archive-item-date">February 12, 2025</span>
-        </article>
-    
-    
-</div>
+    </article>
 </div>
 
             </div>
