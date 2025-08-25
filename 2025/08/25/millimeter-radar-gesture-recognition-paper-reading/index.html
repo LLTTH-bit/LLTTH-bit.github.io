@@ -13,7 +13,7 @@
 
 
 
-<title>AMSV套磁记 | LLTTH&#39;blog</title>
+<title>millimeter-radar-gesture-recognition:paper-reading | LLTTH&#39;blog</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">AMSV套磁记</h1>
+            <h1 class="post-title">millimeter-radar-gesture-recognition:paper-reading</h1>
             
                 <div class="post-meta">
                     
@@ -242,28 +242,47 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">August 9, 2025&nbsp;&nbsp;22:57:55</a>
+                        Date: <a href="#">August 25, 2025&nbsp;&nbsp;10:05:05</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B8%9A/">学业</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h2 id="联系陈知行"><a href="#联系陈知行" class="headerlink" title="联系陈知行"></a>联系陈知行</h2><p>8&#x2F;8发了邮件，一个小时后就已读了，但是一直不回。我还要等一会儿吗？最多等他一周</p>
-<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/l2ivor.png" alt="ivorchan"></p>
-<h2 id="复习内容（陈知行or郭铭强）"><a href="#复习内容（陈知行or郭铭强）" class="headerlink" title="复习内容（陈知行or郭铭强）"></a>复习内容（陈知行or郭铭强）</h2><p>首先模集内容：看第七和第八章，至少问的时候能回答上来一些。</p>
-<p>然后是专业课，我认为信号与系统、数字信号处理还是有必要看的。</p>
-<p>然后是ADC内容，我认为先把DATA CONVERTERS中看过的内容会看一遍，然后把测试内容看一下，接着就是把MATLAB中做的内容回看一下。</p>
-<h2 id="情况有变"><a href="#情况有变" class="headerlink" title="情况有变"></a>情况有变</h2><p>Ivor Chan没有回复，只有张明磊老师的回复，且只有AI芯片设计方向。如果能拿到8000的奖学金，也不用犹豫，毅然决然吧。</p>
-<p>现在就是想一下，对面老师安排面试之前，能做点什么。</p>
+            <h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>小学期-空天院实习，选择的课题是：毫米波雷达手势识别算法研究，基于C3D-CNN实现。正好上个学期学习了雷达信号处理相关知识，以及深度学习，这个题目就能用上。</p>
+<p>使用调频连续波（FMCW）雷达，对雷达回波进行2D-FFT，得到每一帧的RD图，然后使用IC3D网络进行动态的姿势识别。</p>
+<p>随着AI时代的到来（advent），人手势识别正在吸引越来越多注意力。已经有很多的手势识别方法被提出，主要分为<strong>可穿戴式</strong>和<strong>非接触式</strong>传感器。</p>
+<p>可穿戴式，就是在人身上穿戴加速计、磁力计和陀螺仪等，这样精准快速，但是是笨重且易丢失的。</p>
+<p>非接触式的又能分为：视觉型、基于红外传感器（infrared）的、基于超声（ultrasonic）波的、基于电磁信号的。</p>
+<p>视觉型的有点事不需要沉重的传感器、能快速人机交互，但确定是需要高分辨率摄像头与特定的工作环境，且使用摄像头进行识别会带来潜在的隐私风险。</p>
+<p>红外型的并不是直接检测人手发出的红外光，而是使用可控强度（intensity）的内置红外LED灯照亮人手，接收反射回来的红外光进行识别。缺点是传感器前面有障碍物时，会影响性能。</p>
+<p>使用无线信号的手势识别方法大多数使用WiFi信号，成本低廉且应用广泛。这种方法即使在光照不足的情况下可能实现好的识别效果，且不会危害用户隐私，但缺点是接收信号时会产生多径效应，影响估计的精度。</p>
+<p>相比于上面这些，<strong>雷达</strong>作为手势识别的传感器，就有很多优点了。其对工作环境没有特定要求，在全天气环境下均可使用，不会危害用户隐私，且能穿墙识别。</p>
+<p>当然，使用雷达进行手势识别也存在着一些问题，如下：</p>
 <ol>
-<li>verilog&#x2F;FPGA内容： UART&#x2F;SPI通信协议，DDS；几个做过的FPGA实际项目（DDS，ADDA调用，屏幕显示等）</li>
-<li>数电内容： 看一下做过的笔记复习，这部分不知道具体有哪些</li>
-<li>AI内容： 至少把CNN的原理给看了</li>
-<li>AI芯片内容： 找一下端侧AI芯片部署的相关论文</li>
+<li><strong>数据采集</strong>。使用雷达进行数据采集是较为耗时的，因此需要建立使用少量样本进行识别的模型。</li>
+<li><strong>检测和分类的同步进行</strong>。需要同时检测有无手势以及分类手势类型，避免两个动作之间出现较大延迟。</li>
+<li><strong>时空信息的提取</strong>。大部分模型没有考虑帧间信息的关联性。</li>
+<li><strong>模型复杂度</strong>。由于手势识别对计算复杂度与速度有较高要求，设计一个通用、紧凑、高效且轻量化的网络是很重要的。</li>
 </ol>
+<p>本文提出的IC3D网络，在C3D的基础上减少了卷积层和全连接层的数量，同时更改了优化算法、激活函数等部分，实现了较高的准确率。</p>
+<h2 id="Composition-of-the-system"><a href="#Composition-of-the-system" class="headerlink" title="Composition of the system"></a>Composition of the system</h2><p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/composition.png" alt="system"></p>
+<p>整个手势识别系统的组成如上图所示，部署在PC上，通过一台毫米波雷达采集信，经过信号处理得到RD图，再经过过IC3D网络，通过softmax层后得到结果。</p>
+<h2 id="Radar"><a href="#Radar" class="headerlink" title="Radar"></a>Radar</h2><p>雷达部分，使用锯齿波调制的FMCW雷达，也就是之前学过的Chirp信号。发射信号经过延迟$\Delta t_d$后得到回波信号。将发射信号与回波信号相乘后经过低通滤波器，即可得到稳定的IF中频信号。如下图所示：</p>
+<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/IF.png" alt="IF"></p>
+<p>处理后得到的中频信号表达式如下所示：</p>
+<p>$S_{IF}(t) &#x3D; S_R (t) \cdot S_T(t) &#x3D; \frac{1}{2}A_R A_T cos{2\pi[(f_c \cdot \Delta t_d)+(S\cdot \Delta t_d - \Delta f_d)t]}$</p>
+<p>IF信号的形式如下图所示，其频率固定：</p>
+<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/IF2.png" alt="IF2"></p>
 
         </div>
 
@@ -294,13 +313,7 @@
                     
                         <a href="/tags/learning/"># learning</a>
                     
-                        <a href="/tags/%E5%8D%87%E5%AD%A6/"># 升学</a>
-                    
-                        <a href="/tags/AMSV/"># AMSV</a>
-                    
-                        <a href="/tags/%E6%A8%A1%E6%8B%9FIC/"># 模拟IC</a>
-                    
-                        <a href="/tags/%E4%BF%9D%E7%A0%94/"># 保研</a>
+                        <a href="/tags/radar/"># radar</a>
                     
                         
                 </span>
@@ -313,10 +326,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2025/08/14/Edge-AI-Intro/">Edge-AI-Intro</a>
             
-            
-            <a class="next" rel="next" href="/2025/07/07/%E6%97%A9%E7%9D%A1%E6%89%93%E5%8D%A1%E5%B8%96/">早睡打卡帖</a>
+            <a class="next" rel="next" href="/2025/08/14/Edge-AI-Intro/">Edge-AI-Intro</a>
             
         </section>
 
