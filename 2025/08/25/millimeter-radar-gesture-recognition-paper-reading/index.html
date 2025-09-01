@@ -283,6 +283,26 @@
 <p>$S_{IF}(t) &#x3D; S_R (t) \cdot S_T(t) &#x3D; \frac{1}{2}A_R A_T cos{2\pi[(f_c \cdot \Delta t_d)+(S\cdot \Delta t_d - \Delta f_d)t]}$</p>
 <p>IF信号的形式如下图所示，其频率固定：</p>
 <p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/IF2.png" alt="IF2"></p>
+<p>根据雷达回波能够提取出距离-速度等参数，但是这对我们不是很重要。</p>
+<p>在参考的本篇文献中，使用的雷达是德州仪器的 IWR1642BOOST 和 DCA1000EVM 毫米波雷达。其发射波形如下图所示：</p>
+<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/chirp.png" alt="chirp"></p>
+<p>Chirp信号和采样参数的设置如下表所示：</p>
+<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/setting.png" alt="setting"></p>
+<p>这样，一个chirp信号的时长是$100\mu s$，每帧信号中包含128个chirp，计算得一帧的时长是$12.8ms$.</p>
+<p>但每帧的周期设置为$112ms$，因此8帧的时长为$0.896s$。</p>
+<p>这样，每个chirp信号采256个点，每帧信号包含128个chirp，那么每帧信号的尺寸为256x128.</p>
+<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/matrix.png" alt="mATRIX"></p>
+<p>对每帧回波，先在距离维上加窗后进行一次FFT，称为距离维FFT；然后再在chirp维上进行一次FFT，称为速度维FFT。这样即可得到距离-多普勒热力图，即常说的R-D图，如下图所示：</p>
+<p><img src="/2025/02/23/2025-2-23%E5%A4%9C/radar-gesture-recognition-paper-reading/RD.png" alt="RD"></p>
+<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><p>前人的工作中，提出了3D CNN来提取时间序列信息，该网络包含 8 个卷积层、5 个池化层、2 个全连接层和 1 个 softmax 分类层。</p>
+<p>本文中提出的改进包括以下部分：</p>
+<ol>
+<li>减少卷积层和池化层数量。</li>
+<li>降低输入参数的数量，输入尺寸降低为8帧-40x40图像。</li>
+<li>采用Adam优化算法。</li>
+<li>使用Mish激活函数。</li>
+</ol>
+<p>最终的网络架构包括 3 个卷积层、3 个池化层、2 个全连接层以及 1 个 softmax 层。所有卷积层的卷积核大小均为 3×3×3，步幅为 1×1×1。</p>
 
         </div>
 
