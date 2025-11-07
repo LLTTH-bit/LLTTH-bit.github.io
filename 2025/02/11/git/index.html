@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>Git学习 | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Git学习</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 11, 2025&nbsp;&nbsp;18:06:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/ysyx/">ysyx</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>来自bilibili视频：【GeekHour】 一小时Git教程 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1HM411377j/?spm_id_from=333.337.search-card.all.click&vd_source=e99e5d6d2e9c53c73a6b5ebf92bfc6e4">视频链接</a></p>
+<h2 id="课程简介"><a href="#课程简介" class="headerlink" title="课程简介"></a>课程简介</h2><p>git是一种<strong>分布式版本控制系统</strong>。相对于集中式版本控制系统，每个人电脑上都有完整的版本库。当需要将修改内容分享给他人时，只需要互相同步仓库即可。</p>
+<h2 id="安装和初始化配置"><a href="#安装和初始化配置" class="headerlink" title="安装和初始化配置"></a>安装和初始化配置</h2><p>安装好后，运行<code>git --version</code>查看当前版本。</p>
+<p>使用命令：<code>git config --global user.name XXXXX</code>配置用户名。这里的<code>global</code>指的是全局配置，对所有仓库生效；缺省设置是<code>local</code>，只对本地仓库有效；<code>system</code>是系统配置，对所有用户生效。然后配置<code>user.email</code>，也就是用户邮箱。</p>
+<p>运行命令：<code>git config --global credential.helper store</code>保存上面的配置，然后<code>git config --global --list</code>来查看配置的信息。</p>
+<p>至此，配置完成！</p>
+<h2 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h2><p>版本库也叫仓库，简称<code>Repo</code>。其中的文件能够被git跟踪到。</p>
+<p>创建仓库可以有两种方法：使用<code>git init</code>创建本地仓库；从远程服务器上<code>git clone</code>一个已经存在的仓库。</p>
+<p>这里我们创建一个新目录<code>learn-git</code>，在这个路径下输入<code>git init</code>就可以创建一个仓库了。</p>
+<p>输入<code>ls -a</code>即可看到，目录中包含<code>.git</code>目录，说明git仓库已经建立成功了。删除掉这个目录，git仓库也就删除掉了。这时如果运行<code>git init my-repo</code>，就会先在当前目录新建<code>my-repo</code>目录，然后将<code>my-repo</code>目录新建一个仓库。</p>
+<p>通过配置<code>~/.bashrc</code>文件，进入git仓库后就会显示当前的分支。</p>
+<p>除了<code>git init</code>创建仓库以外，还能从远程服务器克隆仓库。在<code>learn-git</code>文件夹下输入<code>git-clone https://github.com/geekhall-laoyang/remote-repo.git</code>命令即可克隆。在当前目录下又生成了一个<code>remote-repo</code>文件夹。这个<code>remote-repo</code>就是我们从服务器上克隆出的仓库。</p>
+<h2 id="工作区域与文件状态"><a href="#工作区域与文件状态" class="headerlink" title="工作区域与文件状态"></a>工作区域与文件状态</h2><p>git的工作区域分为：</p>
+<ol>
+<li>工作区。就是电脑上的目录，文件夹。</li>
+<li>暂存区。是临时存储区域。用于保存即将提交到git仓库的修改内容。</li>
+<li>本地仓库：使用<code>git init</code>创建的仓库。是存储代码和版本信息的主要位置。</li>
+</ol>
+<p>在工作区修改完内容-&gt;<code>git add</code>-&gt;暂存区-&gt;<code>git commit</code>-&gt;本地仓库（弹幕看到一个比喻很形象，后厨-服务员-客人）</p>
+<p>更改完后先加载到暂存区，最后一起提交到本地仓库。</p>
+<p>文件类型分为四种，未跟踪、未修改、已修改、已暂存。</p>
+<h2 id="添加和提交文件"><a href="#添加和提交文件" class="headerlink" title="添加和提交文件"></a>添加和提交文件</h2><p>我们可以在之前的<code>remote-repo</code>中创建新的文件<code>file1.txt</code>，使用<code>git status</code>查看状态，会在<code>Untracked files</code>一栏看到<em>红色</em>的文件名。这时候运行命令<code>git add file1.txt</code>就可以将文件添加到暂存区。这时再次输入<code>git status</code>就会在待提交一栏看到刚刚add的文件。</p>
+<p>这时候运行<code>git commit</code>就能提交已经加到暂存区的文件。注意，没有在暂存区的文件不会被提交。且如果直接运行<code>git commit</code>，会进入一个文件，在第一行写入一些文字，就是本次提交时候的<strong>提交信息</strong>。编辑后保存退出。如果使用<code>git commit -m commit-information</code>命令，就能直接提交，无需再进入文件。</p>
+<p>如果将刚刚提交到暂存区的文件修改一下，运行<code>git status</code>，会发现已修改和待提交处都有这个文件的名字。</p>
+<p>使用<code>git log</code>查看提交记录。像vim一样上下翻页。如果嫌太长可以使用<code>git log --oneline</code>输出简洁的提交记录。</p>
+<h2 id="git-reset回退版本"><a href="#git-reset回退版本" class="headerlink" title="git reset回退版本"></a><code>git reset</code>回退版本</h2><p>有三种模式，命令是<code>git reset --&lt;xx&gt;</code>，参数可以是<code>soft</code> <code>hard</code> <code>mixed</code>。</p>
+<ul>
+<li><strong>soft：</strong> 回退并保留工作区和暂存区的所有内容</li>
+<li><strong>hard：</strong> 回退并丢弃工作区和暂存区的所有内容</li>
+<li><strong>mixed：</strong> 回退并保留工作区的所有内容、丢弃暂存区的所有内容</li>
+</ul>
+<p>默认参数是<code>mixed</code>。</p>
+<p>注意，这里说的“保留”与“丢弃”对应“区域”的文件，说的是回退后当时的文件所处的区域。</p>
+<p>举个例子。新建三个文件<code>file&#123;1..3&#125;.txt</code>，然后每<code>add</code>一个文件就<code>commit</code>一次。这时候我们提交了三次，有三个版本。从第三个版本回退到第二个版本时，<code>file3.txt</code>处于暂存区。这时候如果使用<code>soft</code>，<code>file3.txt</code>就不会被删除；使用<code>hard</code>和<code>mixed</code>，则会被删除，因为这个文件在<strong>第二个版本</strong>处于暂存区。关注的是一个文件<strong>回退后</strong>所处于的区域。</p>
+<p>使用<code>git ls-files</code>能够查看<strong>已经被跟踪的文件</strong>。</p>
+<p>谨慎使用<code>hard</code>参数哦。如果不小心误操作，使用<code>git reflog</code>查看操作的历史记录，找到误操作之前的历史记录，再回溯即可。所有的提交都是可以回溯的。</p>
+<h2 id="git-diff查看差异"><a href="#git-diff查看差异" class="headerlink" title="git diff查看差异"></a><code>git diff</code>查看差异</h2><p>可以查看文件在工作、暂存和本地仓库之间的差异，也可以查看文件在两个版本之间的差异，或者文件在两个分支之间的差异。</p>
+<p>使用<code>git diff</code>命令，默认比较工作区与暂存区之间的差异。比如修改一个文件后，先不添加到暂存区，运行<code>git diff</code>就会展示差异。<code>git add</code>之后差异不存在，使用<code>git diff</code>就不会输出任何内容。</p>
+<p><code>git diff HEAD</code>命令比较工作区与版本库之间的差异。这时候修改了文件，添加到暂存区，但运行<code>git diff HEAD</code>后仍然会有输出。因为工作区和版本库内容并不一致。</p>
+<p>使用命令<code>git diff --cached</code>比较暂存区与版本库之间的差异。</p>
+<p>在命令后加上：<strong>两个版本的提交ID</strong>，就能比较两个版本之间的文件差异。但注意，这里的输出可以理解为：前一个版本到后一个版本 发生了什么变化。如果对换两个版本号的位置，输出结果会是截然相反的。同时，<code>HEAD</code>指向版本的最新提交节点，想要输入最新ID直接输入<code>HEAD</code>即可。</p>
+<p>最常用的是：比较当前版本和上一个版本之间的差异。其对应的快捷命令：<code>git diff HEAD~ HEAD</code>，其中<code>HEAD~</code>表示上一个版本。将<code>~</code>替换为<code>^</code>也是可行的。如果加上数字，<code>git diff HEAD^2 HEAD</code>，表示与当前版本与之前的第二个版本之间的差异。灵活调节数字。</p>
+<p><code>git diff</code>命令的最后还可以加上文件名字，这样就只会查看指定文件的差异。</p>
+<p>该命令还可以比较分支之间的差异，后面学习了分支再细说。</p>
+<h2 id="git-rm删除文件"><a href="#git-rm删除文件" class="headerlink" title="git rm删除文件"></a><code>git rm</code>删除文件</h2><p>如果想删除一个文件，应该怎么做？</p>
+<p>直接删除的话，查看<code>git status</code>，会显示文件删除这个操作没有被添加到暂存区，或者说暂存区中的文件还没有删除。这时候<code>git add .</code>一下，暂存区中的文件也删除掉了，再提交即可。</p>
+<p>想要更快地操作的话，使用<code>git rm file-name</code>即可。这时会直接在工作区和暂存区中删除对应的文件，然后手动提交即可在版本库也删除该文件。</p>
+<p>另外的命令：<code>git rm --cached &lt;file&gt;</code> 在暂存区删除，在工作区保留；<code>git rm -r*</code>递归删除某个目录下的所有子目录和文件。</p>
+<h2 id="gitignore忽略文件"><a href="#gitignore忽略文件" class="headerlink" title="gitignore忽略文件"></a><code>gitignore</code>忽略文件</h2><p>git中有一个特殊文件<code>.gitignore</code>，让我们忽略掉不应该加入到版本库中的文件。</p>
+<p>哪些文件不应该加入？：</p>
+<ul>
+<li>系统自动生成的文件</li>
+<li>编译生成的中间文件和可执行文件</li>
+<li>系统运行自动生成的文件，日志、缓存、临时文件</li>
+<li>设计身份、命令、口令、密钥等敏感信息文件</li>
+</ul>
+<p>在仓库中新建文件<code>.gitignore</code>，如果想屏蔽某个特定文件，就直接输入文件名；如果想输入某一后缀的文件，就使用通配符。这里自己探索吧。</p>
+<p>需要注意的是，如果在将某一文件屏蔽前，已经追踪了这个文件，那么现在再修改这个文件，git还是会继续追踪；只有使用<code>git rm &lt;file&gt;  (--cached)</code>命令后，停止追踪，才能屏蔽掉这个文件。（–cached后缀可有可无，取决于想不想在本地删除）</p>
+<p>另外，git是不会追踪空的文件夹的。</p>
+<p>如果想忽略文件夹，在<code>.gitignore</code>中请以斜线结尾。如忽略<code>temp</code>文件夹，在<code>.gitignore</code>中加入<code>temp/</code>即可。</p>
+<p>关于<code>.gitignore</code>文件的匹配规则：</p>
+<ul>
+<li>从上到下逐行匹配，每行代表一个忽略模式。</li>
+<li>使用blob模式匹配，<code>*</code>通配任意个字符，<code>?</code>通配一个字符，<code>[]</code>表示匹配括号中的单个字符</li>
+<li><code>**</code>表示匹配任意的中间目录</li>
+<li><code>[0-9]</code> <code>[a-z]</code>表示匹配范围内的字符</li>
+<li><code>!</code>表示取反。比如<code>!*.log</code>，表示只跟踪所有的<code>log</code>文件，即使前面忽略过<code>log</code>文件。</li>
+</ul>
+<p>这里的规则太复杂了……github上有常用语言的忽略模板。</p>
+<h2 id="注册github账号"><a href="#注册github账号" class="headerlink" title="注册github账号"></a>注册github账号</h2><p>github是一个非常流行的代码托管平台。注册很简单，不再赘述。之前已经注册过了。</p>
+<h2 id="SSH配置和远程仓库"><a href="#SSH配置和远程仓库" class="headerlink" title="SSH配置和远程仓库"></a>SSH配置和远程仓库</h2><p>进入主页，按照提示可以简单地创建一个新的仓库。进入仓库后会提示我们如何关联或者创建，这里后面再说。</p>
+<p>在<code>git clone</code>时有两种方式：http和SSH。这里我们配置SSH后使用SSH方法。我们不妨先在github创建一个仓库，便于后面克隆到本地。</p>
+<p>进入<code>~/.ssh</code>，不存在这个目录的话，运行下面的命令会自动生成。保险起见，还是手动创建一个吧。</p>
+<p>运行命令<code>ssh-keygen -t rsa -b 4096</code>，即可生成名为<code>id_rsa</code>文件。如果是第一次生成密钥，直接回车；如果不是，直接回车后新的密钥会覆盖掉旧的。在这里不直接回车，输入一个名字（不必带后缀），就会生成新的密钥而不是<code>id_rsa</code>。然后输入两次密码。</p>
+<p>这里会生成两个文件，<code>id_rsa</code>和<code>id_rsa.pub</code>，没有扩展名的是私钥，谁也不要给！！！！<code>.pub</code>后缀的是公钥，复制添加到gitub。复制时需要先将<code>vim</code>中的内容复制到系统剪切板，方法是进入可视模式后，选中所有文本，依次按下<code>&quot;+y</code>；然后再按<code>ctrl+shift+v</code>即可复制出来。</p>
+<p>如果上面使用的是默认的<code>id_rsa</code>密钥，那么就配置好了；如果更改了名字，那么运行下面这个命令（更改后名字为test）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> config <span class="comment"># create &quot;config&quot;</span></span><br><span class="line"><span class="comment"># 在config中添加下面的内容</span></span><br><span class="line">Host github.com</span><br><span class="line">HostName github.com</span><br><span class="line">PreferredAuthentication publickey</span><br><span class="line">IdentityFile ~/.ssh/test</span><br></pre></td></tr></table></figure>
+
+<p>这样就配置好了！</p>
+<p>这时使用SSH克隆命令，然后输入密钥对应的密码，即可克隆。这里记得关掉vpn，或者改成direct。</p>
+<p>创建新文件后，添加提交。但远程仓库这时候看不到新的文件，因为本地仓库和远程仓库是两个文件。只有使用<code>git push</code>命令后，远程仓库才会被同步。<code>push</code>指把本地仓库推送给远程，<code>pull</code>是拉取到本地。</p>
+<p>在我们从远程仓库克隆的时候，就相当于把本地仓库和远程仓库关联了起来。对于有权限的仓库，使用推送和拉取命令就能更新本地或远程仓库。</p>
+<h2 id="关联本地仓库和远程仓库"><a href="#关联本地仓库和远程仓库" class="headerlink" title="关联本地仓库和远程仓库"></a>关联本地仓库和远程仓库</h2><p>如何把本地仓库放到远程仓库里面？</p>
+<p>使用<code>git remote add</code>命令将已经存在的仓库加进远程仓库。具体命令在github上有提示（先运行第一行）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@github.com:LLTTH-bit/My-second-repo.git <span class="comment">#origin是远程仓库默认别名 后面是仓库链接</span></span><br><span class="line">git branch -M main <span class="comment">#指定分支的名称为main，默认是main就不必运行</span></span><br><span class="line">git push -u origin main:main <span class="comment">#把本地仓库和远程仓库关联起来 本地仓库的main推送给远程的main 我们的名字可能是master，注意修改</span></span><br></pre></td></tr></table></figure>
+
+<p>如果我们的分支是<code>master</code>，可以使用命令<code>git branch -M main</code>来强制重命名为<code>main</code>（如果有其他分支名为<code>main</code>则覆盖）</p>
+<p>运行第一行代码之后，使用<code>git remote -v</code>查看对应的远程仓库的别名和地址，别名默认是<code>origin</code>。</p>
+<p>从远程仓库更新本地仓库时，运行命令<code>git pull &lt;远程仓库名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;</code>，注意本地分支可能是<code>master</code>。如果省略仓库和分支的名称，默认拉取<code>origin</code>的<code>main</code>分支。</p>
+<p>关于合并时发生冲突、<code>git fetch</code>、分支 等内容，后面再说~</p>
+<h2 id="gitee-gitlab的使用"><a href="#gitee-gitlab的使用" class="headerlink" title="gitee gitlab的使用"></a>gitee gitlab的使用</h2><p><code>gitee</code>是国内平台，速度相对快；<code>gitlab</code>的特点是私有化部署，可以搭建属于自己的私有服务器，适用于安全性较高的情况。</p>
+<h3 id="gitee"><a href="#gitee" class="headerlink" title="gitee"></a>gitee</h3><p>注册很简单，设置SSH公钥过程与github一致。</p>
+<p>但gitee在创建仓库时只能选择私有，之后在设置里面才能把它公开。</p>
+<p>克隆等操作与github相似，不再赘述。</p>
+<h3 id="gitlab"><a href="#gitlab" class="headerlink" title="gitlab"></a>gitlab</h3><p>注册、添加SSH、创建仓库都与github相同，不再赘述。</p>
+<p>重点是gitlab的<strong>私有化部署</strong>。部署过程在这里不再展开，自己下去研究。</p>
+<p>在<strong>私有化服务器</strong>上创建仓库，过程同github类似。</p>
+<p>一个本地仓库可以关联到多个远程仓库。使用<code>git remote add</code>命令。</p>
+<h2 id="GUI工具"><a href="#GUI工具" class="headerlink" title="GUI工具"></a>GUI工具</h2><p>github desktop，只管理github项目则基本够用，windows mac支持</p>
+<p>sourcetree，支持windows mac</p>
+<p>gitKraken，商用的图形化工具，免费的功能有限，支持windows和mac</p>
+<h2 id="在vscode中使用git"><a href="#在vscode中使用git" class="headerlink" title="在vscode中使用git"></a>在vscode中使用git</h2><p>vscode支持直接从命令行启动 输入<code>code .</code>即可在vscode打开当前目录。如何在vscode打开终端？</p>
+<p>按<code>ctrl+shift+p</code>后输入<code>setting</code>可以进入<code>json</code>文件，存储了所有vscode的设置内容。</p>
+<p>在源码管理器可以看到仓库的状态。</p>
+<p>在更改列表中可以看到未暂存的内容。可以放弃、保留更改，以及添加到暂存区。也可以进行提交。也就是图形化操作。</p>
+<p><code>??</code>表示为跟踪的文件，<code>M</code>表示已修改的文件，<code>A</code>表示已添加暂存的文件，<code>D</code>表示已删除的文件，<code>R</code>表示重命名的文件，<code>U</code>表示已更新未合并的文件。</p>
+<p>在提交时记得加上消息，否则可能会崩溃。</p>
+<h2 id="分支简介和基本操作"><a href="#分支简介和基本操作" class="headerlink" title="分支简介和基本操作"></a>分支简介和基本操作</h2><p>分支（Branch）是一个重要操作。</p>
+<p>分支适合团队协作和开发管理。多个开发人员可以在自己的分支上工作，最后再合并。</p>
+<p>视频中提到可以用可视化工具进行分支操作。但是我在虚拟机上还没有安装可视化工具，所以就只用命令行了。</p>
+<p>使用<code>git branch</code>查看当前仓库的所有分支。使用<code>git branch &lt;branch name&gt;</code>来创建一个新的分支。新的分支会保存创建分支前当前分支的文件，新分支的起点相当于在那里。</p>
+<p>使用<code>git checkout &lt;branch name&gt;</code>切换到不同的分支。但该命令也可以恢复文件，当分支名与文件名相同时可能会出现歧义。因此可以使用<code>git switch &lt;branch name&gt;</code>切换分支。</p>
+<p>如果在<code>dev</code>分支修改、新建文件并提交，切换到<code>main</code>分支后是看不到<code>dev</code>分支下修改和新建的文件的，因为切换分支时文件会发生变动。</p>
+<p>使用<code>git merge &lt;branch name&gt;</code>可以将输入的分支与<strong>当前的分支</strong>合并。</p>
+<p>合并后，被合并的分支仍然的存在；要删除分支时，使用<code>git branch -d &lt;branch name&gt;</code>删除分支。如果想要删除的分支没有被合并，需要使用<code>-D</code>参数。</p>
+<p>当然，分支合并时可能会有冲突，后面再讲。</p>
+<h2 id="解决合并冲突"><a href="#解决合并冲突" class="headerlink" title="解决合并冲突"></a>解决合并冲突</h2><p>上一节只学习了如何合并，貌似并没有对合并的原则进行讲解。如果不深究这一块内容，是会出现一些问题的。</p>
+<p>如果两个分支的修改内容并不重合，那么git会自动完成合并。</p>
+<p>如果两个分支修改了同一个文件的同一行代码呢？冲突时会自动报错，需要手动修改冲突的文件，选择留下的内容。然后提交就自动合并了。使用<code>git status</code>后会发现提示，可以使用命令来终止合并。</p>
+<h2 id="回退和rebase"><a href="#回退和rebase" class="headerlink" title="回退和rebase"></a>回退和rebase</h2><p><code>Rebase</code>，中文意思是变基。</p>
+<p>可以在任意分支上执行变基操作，命令是<code>git rebase &lt;branch name&gt;</code>。会找到当前分支与目标分支中的公共祖先，将当前分支从共同祖先到最新提交处 全部移动到 目标分支的最新提交后面。</p>
+<p>这里太复杂了，后面有需要再细究吧。</p>
+<h2 id="分支管理和工作流模型"><a href="#分支管理和工作流模型" class="headerlink" title="分支管理和工作流模型"></a>分支管理和工作流模型</h2><p>工作流模型：好的规范，让工作更有条理。</p>
+<p>gitflow模型：</p>
+<ul>
+<li>分支分为五种类型</li>
+<li><code>main</code>分支叫做主线&#x2F;基线分支。主线分支的代码会部署到生产环境中，只能通过合并分支的方法来修改。</li>
+<li><code>hotfix</code>分支，用于解决线上问题，修复完成后合并回<code>main</code>分支。问题修复分支会更新小版本号。</li>
+<li><code>release</code>分支，版本发布分支，也叫预发布分支。从开发分支中分离出来，稳定后合并到主分支和开发分支中。</li>
+<li><code>develop</code>分支，开发分支，从主线中分离出来，用于开发和测试。是项目的核心分支，长期存在。</li>
+<li><code>feature</code>分支，功能分支，用于开发新功能，从开发分支中分离出来，会合并回开发分支。</li>
+</ul>
+<p>按照生命周期分为：<strong>主要分支</strong>和<strong>辅助分支</strong>。主要分支包括<code>main</code>和<code>develop</code>分支。其他都是辅助分支，完成功能后可以删除。</p>
+<p>前面的gitflow模型有点复杂，可以看一看github flow模型。</p>
+<p>github flow模型：</p>
+<p>只有一个长期存在的主分支，主分支可以直接部署在生产环境，禁止直接在主分支上提交。</p>
+<p>成员可以在自己的分支开发，最后发起<code>Pull Request</code>发布合并到主分支。</p>
+<p>关于<strong>分支命名</strong>：带有意义的描述性名称来命名分支</p>
+<p>关于<strong>分支管理</strong>：定时合并已经成功验证的分支，及时删除已经合并的分支；保持合适的分支数量；为分支设置合适的管理权限。</p>
+<h2 id="cherry-pick"><a href="#cherry-pick" class="headerlink" title="cherry pick"></a>cherry pick</h2><p>这个视频中没有讲，有时间自己补上。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/learning/"># learning</a>
+                    
+                        <a href="/tags/CS/"># CS</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/02/11/PA0/">PA0</a>
+            
+            
+            <a class="next" rel="next" href="/2025/02/11/MissingSemester/">Missing Semester of Your CS Education</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

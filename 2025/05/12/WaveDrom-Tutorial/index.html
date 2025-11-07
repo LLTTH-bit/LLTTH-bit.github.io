@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>WaveDrom-Tutorial | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">WaveDrom-Tutorial</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 12, 2025&nbsp;&nbsp;20:02:07</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Digital/">Digital</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>WaveDrom是一个使用代码进行数字波形绘制的工具。其官方文档似乎有些简略，故写此文，对其官方文档进行解析，便于查阅。</p>
+<h2 id="Step0-How-to-install-it"><a href="#Step0-How-to-install-it" class="headerlink" title="Step0.How to install it?"></a>Step0.How to install it?</h2><p>我在vscode中安装了<code>Waveform Render</code>插件，这样新建<code>.json</code>文件就可以渲染波形。记得关闭json文件报错。</p>
+<p>当然，也可以下载桌面端，也可以在其官方网站进行在线渲染：<a target="_blank" rel="noopener" href="https://wavedrom.com/">WaveDrom</a></p>
+<h2 id="Step1-The-signal-信号"><a href="#Step1-The-signal-信号" class="headerlink" title="Step1.The signal 信号"></a>Step1.The signal 信号</h2><p>代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Alfa&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> <span class="string">&quot;01.zx=ud.23.456789&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/theSignal.png" alt="1"></p>
+<p>解析：</p>
+<p>首先，<code>name</code>指定了所显示波形的名称，而<code>wave</code>中的每一个字符代表一个周期的波形。</p>
+<p>这里的<code>0</code>和<code>1</code>应该指的是高与低电平。如果下一周期的波形延续之前的状态，使用<code>.</code>即可。</p>
+<p><code>z</code>代表了高阻态，而<code>x</code>指的是未知状态。</p>
+<p><code>=</code>表示白色框框（虚线框后面一个周期的波形）。<code>u</code>是高虚线，<code>d</code>是低虚线。</p>
+<p><code>2</code>和<code>=</code>一样，都是白色框框，而<code>3</code> <code>4</code> <code>5</code> <code>6</code> <code>7</code> <code>7</code> <code>9</code>分别对应 黄&#x2F;橙&#x2F;蓝&#x2F;青&#x2F;绿&#x2F;粉&#x2F;红 颜色的框框。</p>
+<h2 id="Step2-Adding-Clock-时钟"><a href="#Step2-Adding-Clock-时钟" class="headerlink" title="Step2.Adding Clock 时钟"></a>Step2.Adding Clock 时钟</h2><p>关于时钟信号，有其专有代码。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;pclk&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;p.......&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Pclk&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;P.......&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;nclk&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;n.......&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Nclk&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;N.......&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;clk0&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;phnlPHNL&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;clk1&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;xhlhLHl.&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;clk2&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;hpHplnLn&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;clk3&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;nhNhplPl&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;clk4&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;xlh.L.Hx&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/addingClock.png" alt="2"></p>
+<p><code>p</code>代表上升沿时钟，其大写<code>P</code>代表绘有箭头的上升沿时钟。同样<code>n</code>和<code>N</code>对应下降沿时钟。</p>
+<p><code>h</code>代表持续一个周期的高电平，其大写<code>H</code>代表绘有箭头的高电平（如果有边沿）。同样<code>l</code>和<code>L</code>对应低电平。</p>
+<p><code>x</code>代表未知态，同时绘有边沿（如果有）；而其大写<code>X</code>不包括边沿。</p>
+<h2 id="Step-3-Putting-all-together-信号与时钟组合起来"><a href="#Step-3-Putting-all-together-信号与时钟组合起来" class="headerlink" title="Step 3. Putting all together 信号与时钟组合起来"></a>Step 3. Putting all together 信号与时钟组合起来</h2><p>在典型的时序图中，会同时出现信号与时钟。</p>
+<p>在Step1中所讲的带颜色的<em>框框</em>，表示multi-bit signal 多位信号。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;clk&quot;</span><span class="punctuation">,</span>  wave<span class="punctuation">:</span> <span class="string">&quot;P......&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;bus&quot;</span><span class="punctuation">,</span>  wave<span class="punctuation">:</span> <span class="string">&quot;x.==.=x&quot;</span><span class="punctuation">,</span> data<span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;head&quot;</span><span class="punctuation">,</span> <span class="string">&quot;body&quot;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;wire&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> <span class="string">&quot;0.1..0.&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/puttingAllTogether.png" alt="3"></p>
+<p>对多位信号（<code>=</code> <code>2~9</code>），会自动从<code>data</code>中获取标签，与所有的框框一一对应，绘制在波形图上。</p>
+<h2 id="Step-4-Spacers-and-Gaps-省略"><a href="#Step-4-Spacers-and-Gaps-省略" class="headerlink" title="Step 4. Spacers and Gaps 省略"></a>Step 4. Spacers and Gaps 省略</h2><p>有时候需要对信号&#x2F;时钟进行省略，使用<code>|</code>符号即可。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;clk&quot;</span><span class="punctuation">,</span>         wave<span class="punctuation">:</span> <span class="string">&quot;p.....|...&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Data&quot;</span><span class="punctuation">,</span>        wave<span class="punctuation">:</span> <span class="string">&quot;x.345x|=.x&quot;</span><span class="punctuation">,</span> data<span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;head&quot;</span><span class="punctuation">,</span> <span class="string">&quot;body&quot;</span><span class="punctuation">,</span> <span class="string">&quot;tail&quot;</span><span class="punctuation">,</span> <span class="string">&quot;data&quot;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Request&quot;</span><span class="punctuation">,</span>     wave<span class="punctuation">:</span> <span class="string">&quot;0.1..0|1.0&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Acknowledge&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> <span class="string">&quot;1.....|01.&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/gap.png" alt="4"></p>
+<h2 id="Step-5-The-groups-分组"><a href="#Step-5-The-groups-分组" class="headerlink" title="Step 5. The groups 分组"></a>Step 5. The groups 分组</h2><p>信号可以分组，只需要将需要的信号使用一对<code>[]</code>包裹起来即可，在中括号内最前端加上<code>&#39;name&#39;</code>即可对组进行命名。分组可以嵌套。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span>    name<span class="punctuation">:</span> &#x27;clk&#x27;<span class="punctuation">,</span>   wave<span class="punctuation">:</span> &#x27;p..Pp..P&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;Master&#x27;<span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;ctrl&#x27;<span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span>name<span class="punctuation">:</span> &#x27;write&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">01.0</span>....&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span>name<span class="punctuation">:</span> &#x27;read&#x27;<span class="punctuation">,</span>  wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span>.<span class="number">.1</span>.<span class="number">.0</span>&#x27;<span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span>  name<span class="punctuation">:</span> &#x27;addr&#x27;<span class="punctuation">,</span>  wave<span class="punctuation">:</span> &#x27;x3.x4..x&#x27;<span class="punctuation">,</span> data<span class="punctuation">:</span> &#x27;A1 A2&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span>  name<span class="punctuation">:</span> &#x27;wdata&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;x3.x....&#x27;<span class="punctuation">,</span> data<span class="punctuation">:</span> &#x27;D1&#x27;   <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;Slave&#x27;<span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;ctrl&#x27;<span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span>name<span class="punctuation">:</span> &#x27;ack&#x27;<span class="punctuation">,</span>   wave<span class="punctuation">:</span> &#x27;x01x0<span class="number">.1</span>x&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span>  name<span class="punctuation">:</span> &#x27;rdata&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;x....<span class="number">.4</span>x&#x27;<span class="punctuation">,</span> data<span class="punctuation">:</span> &#x27;Q2&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/group.png" alt="5"></p>
+<h2 id="Step-6-Period-and-Phase-周期和相位"><a href="#Step-6-Period-and-Phase-周期和相位" class="headerlink" title="Step 6. Period and Phase 周期和相位"></a>Step 6. Period and Phase 周期和相位</h2><p>Step1中说过，<code>wave</code>中的一个符号代表一个时间周期。但这不是固定的。通过调节<code>period</code>参数可以控制一个符号占据几个时间周期（只能是整数！如不是，会自动向上取整）。</p>
+<p>同时，如果不同路信号之间有相位差，可以通过<code>phase</code>参数调节。注意，该参数范围为0-1.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;CK&quot;</span><span class="punctuation">,</span>   wave<span class="punctuation">:</span> <span class="string">&quot;P.......&quot;</span><span class="punctuation">,</span>                                              period<span class="punctuation">:</span> <span class="number">2</span>  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;CMD&quot;</span><span class="punctuation">,</span>  wave<span class="punctuation">:</span> <span class="string">&quot;x.3x=x4x=x=x=x=x&quot;</span><span class="punctuation">,</span> data<span class="punctuation">:</span> <span class="string">&quot;RAS NOP CAS NOP NOP NOP NOP&quot;</span><span class="punctuation">,</span> phase<span class="punctuation">:</span> <span class="number">0.5</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;ADDR&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> <span class="string">&quot;x.=x..=x........&quot;</span><span class="punctuation">,</span> data<span class="punctuation">:</span> <span class="string">&quot;ROW COL&quot;</span><span class="punctuation">,</span>                     phase<span class="punctuation">:</span> <span class="number">0.5</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;DQS&quot;</span><span class="punctuation">,</span>  wave<span class="punctuation">:</span> <span class="string">&quot;z.......0.1010z.&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;DQ&quot;</span><span class="punctuation">,</span>   wave<span class="punctuation">:</span> <span class="string">&quot;z.........5555z.&quot;</span><span class="punctuation">,</span> data<span class="punctuation">:</span> <span class="string">&quot;D0 D1 D2 D3&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/periodAndPhase.png" alt="6"></p>
+<p>尽管示例代码中只对clk进行了周期调整、只对信号进行了相位调整，但实际上周期和相位调整对信号与时钟都可用。</p>
+<h2 id="Step-7-The-config-property-配置一些属性"><a href="#Step-7-The-config-property-配置一些属性" class="headerlink" title="Step 7.The config{} property 配置一些属性"></a>Step 7.The config{} property 配置一些属性</h2><p><code>config:&#123;...&#125;</code>语句能够调整渲染的很多属性，且听我一一道来。</p>
+<h3 id="7-1-hscale-横向比例"><a href="#7-1-hscale-横向比例" class="headerlink" title="7.1 hscale 横向比例"></a>7.1 hscale 横向比例</h3><p>使用方式见代码</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;clk&quot;</span><span class="punctuation">,</span>     wave<span class="punctuation">:</span> <span class="string">&quot;p....&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Data&quot;</span><span class="punctuation">,</span>    wave<span class="punctuation">:</span> <span class="string">&quot;x345x&quot;</span><span class="punctuation">,</span>  data<span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;head&quot;</span><span class="punctuation">,</span> <span class="string">&quot;body&quot;</span><span class="punctuation">,</span> <span class="string">&quot;tail&quot;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Request&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> <span class="string">&quot;01..0&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  config<span class="punctuation">:</span> <span class="punctuation">&#123;</span> hscale<span class="punctuation">:</span> <span class="number">1</span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/hscale1.png" alt="7.1.1"></p>
+<p>将1调整为2后：</p>
+<p><img src="/2025/05/12/WaveDrom-Tutorial/hscale2.png" alt="7.1.2"></p>
+<p>调整<code>hscale</code>参数大小能够调整一个时间单元对应的宽度。参数应当是大于0的整数。默认值为1.</p>
+<h3 id="7-2-skin-风格？"><a href="#7-2-skin-风格？" class="headerlink" title="7.2 skin 风格？"></a>7.2 skin 风格？</h3><p><code>config:&#123;skin:&#39;...&#39;&#125;</code>语句调整<code>skin</code>，只有两种：<code>default</code>和&#96;narrow，前者是默认，后者更窄一点。</p>
+<p>需要注意的是，如果需要同时调整<code>skin</code>与<code>hscale</code>，需要像下面这样写：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;clk&quot;</span><span class="punctuation">,</span>     wave<span class="punctuation">:</span> <span class="string">&quot;p....&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Data&quot;</span><span class="punctuation">,</span>    wave<span class="punctuation">:</span> <span class="string">&quot;x345x&quot;</span><span class="punctuation">,</span>  data<span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;head&quot;</span><span class="punctuation">,</span> <span class="string">&quot;body&quot;</span><span class="punctuation">,</span> <span class="string">&quot;tail&quot;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> <span class="string">&quot;Request&quot;</span><span class="punctuation">,</span> wave<span class="punctuation">:</span> <span class="string">&quot;01..0&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  config<span class="punctuation">:</span> <span class="punctuation">&#123;</span> hscale<span class="punctuation">:</span> <span class="number">2</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  config<span class="punctuation">:</span><span class="punctuation">&#123;</span>skin<span class="punctuation">:</span><span class="string">&quot;default&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-head-foot-上下标注"><a href="#7-3-head-foot-上下标注" class="headerlink" title="7.3 head&#x2F;foot 上下标注"></a>7.3 head&#x2F;foot 上下标注</h3><p><code>head:&#123;...&#125;</code>和<code>foot:&#123;...&#125;</code>分别定义了时序图上下区域中的内容。</p>
+<ul>
+<li>tick:添加与垂直标记（时间单元的边界）对齐的时间线标签</li>
+<li>tock:在垂直标记之间添加时间线标签</li>
+<li>text:添加标题或说明文字</li>
+<li>every:每隔N个周期进行tick&#x2F;tock操作</li>
+</ul>
+<p>多说无益，看代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span>name<span class="punctuation">:</span>&#x27;clk&#x27;<span class="punctuation">,</span>         wave<span class="punctuation">:</span> &#x27;p....&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span>name<span class="punctuation">:</span>&#x27;Data&#x27;<span class="punctuation">,</span>        wave<span class="punctuation">:</span> &#x27;x345x&#x27;<span class="punctuation">,</span> data<span class="punctuation">:</span> &#x27;a b c&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span>name<span class="punctuation">:</span>&#x27;Request&#x27;<span class="punctuation">,</span>     wave<span class="punctuation">:</span> &#x27;<span class="number">01.</span><span class="number">.0</span>&#x27; <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> head<span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">   text<span class="punctuation">:</span>&#x27;WaveDrom example&#x27;<span class="punctuation">,</span></span><br><span class="line">   tick<span class="punctuation">:</span><span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">   every<span class="punctuation">:</span><span class="number">2</span></span><br><span class="line"> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"> foot<span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">   text<span class="punctuation">:</span>&#x27;Figure <span class="number">100</span>&#x27;<span class="punctuation">,</span></span><br><span class="line">   tock<span class="punctuation">:</span><span class="number">9</span></span><br><span class="line"> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/head1.png" alt="7.3.1"></p>
+<p>需要注意的点：</p>
+<ol>
+<li><code>tick/tock</code>语句后面跟的参数，意味着时间线标记开始的数字</li>
+<li><code>head</code>开启了<code>tick</code>，且<code>every=2</code>，每隔两个周期才会标记一次</li>
+</ol>
+<p><code>head/text</code>文本具有svg文本的所有属性。可以使用标准的svg<code>tspan</code>属性来修改文本的默认属性。使用<code>text</code>命令即可对文字标注进行调整。</p>
+<ul>
+<li><code>h1</code> <code>h2</code> <code>h3</code> <code>h4</code> <code>h5</code> <code>h6</code> 定义了字体大小。<code>h1</code>最大。</li>
+<li><code>muted</code> <code>warning</code> <code>error</code> <code>info</code> <code>success</code>定义了字体颜色风格。分别：灰&#x2F;黄&#x2F;红&#x2F;蓝&#x2F;绿。</li>
+</ul>
+<p>看代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span>name<span class="punctuation">:</span>&#x27;clk&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;p.....PPPPp....&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span>name<span class="punctuation">:</span>&#x27;dat&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;x...<span class="number">.2345</span>x.....&#x27;<span class="punctuation">,</span> data<span class="punctuation">:</span> &#x27;a b c d&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span>name<span class="punctuation">:</span>&#x27;req&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span>..<span class="number">.1</span>..<span class="number">.0</span>.....&#x27; <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">head<span class="punctuation">:</span> <span class="punctuation">&#123;</span>text<span class="punctuation">:</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>class<span class="punctuation">:</span>&#x27;error h1&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;error &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>class<span class="punctuation">:</span>&#x27;warning h2&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;warning &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>class<span class="punctuation">:</span>&#x27;info h3&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;info &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>class<span class="punctuation">:</span>&#x27;success h4&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;success &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>class<span class="punctuation">:</span>&#x27;muted h5&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;muted &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>class<span class="punctuation">:</span>&#x27;h6&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;h6 &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    &#x27;default &#x27;<span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>fill<span class="punctuation">:</span>&#x27;pink&#x27;<span class="punctuation">,</span> &#x27;font-weight&#x27;<span class="punctuation">:</span>&#x27;bold&#x27;<span class="punctuation">,</span> &#x27;font-style&#x27;<span class="punctuation">:</span>&#x27;italic&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;pink-bold-italic&#x27;<span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">foot<span class="punctuation">:</span> <span class="punctuation">&#123;</span>text<span class="punctuation">:</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> &#x27;E=mc&#x27;<span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>dy<span class="punctuation">:</span>&#x27;<span class="number">-5</span>&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;<span class="number">2</span>&#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>dy<span class="punctuation">:</span> &#x27;<span class="number">5</span>&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;. &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>&#x27;font-size&#x27;<span class="punctuation">:</span>&#x27;<span class="number">25</span>&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;B &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>&#x27;text-decoration&#x27;<span class="punctuation">:</span>&#x27;overline&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span>&#x27;over &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>&#x27;text-decoration&#x27;<span class="punctuation">:</span>&#x27;underline&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span>&#x27;under &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>&#x27;baseline-shift&#x27;<span class="punctuation">:</span>&#x27;sub&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;sub &#x27;<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">[</span>&#x27;tspan&#x27;<span class="punctuation">,</span> <span class="punctuation">&#123;</span>&#x27;baseline-shift&#x27;<span class="punctuation">:</span>&#x27;super&#x27;<span class="punctuation">&#125;</span><span class="punctuation">,</span> &#x27;super &#x27;<span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span>tock<span class="punctuation">:</span><span class="number">-5</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/text.png" alt="7.3"></p>
+<h2 id="Step-8-Arrows-箭头"><a href="#Step-8-Arrows-箭头" class="headerlink" title="Step 8. Arrows 箭头"></a>Step 8. Arrows 箭头</h2><p>可以对波形图中的两点进行连线，并附上文字。有两种：曲线和直线。</p>
+<h3 id="8-1-直线"><a href="#8-1-直线" class="headerlink" title="8.1 直线"></a>8.1 直线</h3><p>先看代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;A&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">01.</span><span class="number">.0</span>..&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;.a..e..&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;B&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.1</span>.<span class="number">.0</span>.&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;..b..d.&#x27;<span class="punctuation">,</span> phase<span class="punctuation">:</span><span class="number">0.5</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;C&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span><span class="number">.1</span>.<span class="number">.0</span>&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;...c..f&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span>                              node<span class="punctuation">:</span> &#x27;...g..h&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span>                              node<span class="punctuation">:</span> &#x27;...I..J&#x27;<span class="punctuation">,</span>  phase<span class="punctuation">:</span><span class="number">0.5</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;D&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span><span class="number">.1</span>.<span class="number">.0</span>&#x27;<span class="punctuation">,</span>  phase<span class="punctuation">:</span><span class="number">0.5</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  edge<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    &#x27;b-|a t1&#x27;<span class="punctuation">,</span> &#x27;a-|c t2&#x27;<span class="punctuation">,</span> &#x27;b-|-c t3&#x27;<span class="punctuation">,</span> &#x27;c-|-&gt;e t4&#x27;<span class="punctuation">,</span> &#x27;e-|&gt;f more text&#x27;<span class="punctuation">,</span></span><br><span class="line">    &#x27;e|-&gt;d t6&#x27;<span class="punctuation">,</span> &#x27;c-g&#x27;<span class="punctuation">,</span> &#x27;f-h&#x27;<span class="punctuation">,</span> &#x27;g&lt;-&gt;h <span class="number">3</span> ms&#x27;<span class="punctuation">,</span> &#x27;I+J <span class="number">5</span> ms&#x27;</span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/sharpline.png" alt="8.1"></p>
+<p>翻译：（其实符号本身能和形状能够对应起来）</p>
+<ul>
+<li><code>-</code> 两点直接连线</li>
+<li><code>-|</code> 带一个拐点的连线</li>
+<li><code>-|-</code> 带两个拐点的连线</li>
+<li><code>&lt;-&gt;</code> 双箭头两点直线</li>
+<li><code>&lt;-|&gt;</code> 带一个拐点的双箭头直线</li>
+<li><code>&lt;-|-&gt;</code> 带两个拐点的双箭头直线</li>
+<li><code>-&gt;</code> 单箭头两点直线</li>
+<li><code>-|&gt;或|-&gt;</code> 带一个拐点的单箭头直线 两者方向不同</li>
+<li><code>-|-&gt;</code> 带两个拐点的单箭头直线</li>
+</ul>
+<h3 id="8-2-曲线"><a href="#8-2-曲线" class="headerlink" title="8.2 曲线"></a>8.2 曲线</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;A&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">01.</span>......<span class="number">.0</span>....&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;.a........j&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;B&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.1</span>......<span class="number">.0</span><span class="number">.1</span>..&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;..b.......i&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;C&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span><span class="number">.1</span>...<span class="number">.0</span>..<span class="number">.1</span>..&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;...c....h..&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;D&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span>.<span class="number">.1</span>.<span class="number">.0</span>....<span class="number">.1</span>.&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;....d..g...&#x27; <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> name<span class="punctuation">:</span> &#x27;E&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;<span class="number">0.</span>..<span class="number">.10</span>......<span class="number">.1</span>&#x27;<span class="punctuation">,</span>  node<span class="punctuation">:</span> &#x27;.....ef....&#x27; <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  edge<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    &#x27;a~b t1&#x27;<span class="punctuation">,</span> &#x27;c-~a t2&#x27;<span class="punctuation">,</span> &#x27;c-~&gt;d time <span class="number">3</span>&#x27;<span class="punctuation">,</span> &#x27;d~-e&#x27;<span class="punctuation">,</span></span><br><span class="line">    &#x27;e~&gt;f&#x27;<span class="punctuation">,</span> &#x27;f-&gt;g&#x27;<span class="punctuation">,</span> &#x27;g-~&gt;h&#x27;<span class="punctuation">,</span> &#x27;h~&gt;i some text&#x27;<span class="punctuation">,</span> &#x27;h~-&gt;j&#x27;</span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2025/05/12/WaveDrom-Tutorial/spline.png" alt="8.2"></p>
+<p>翻译：</p>
+<ul>
+<li><code>~</code> S曲线</li>
+<li><code>-~</code> 单段曲线</li>
+<li><code>&lt;~&gt;</code> 双箭头S曲线</li>
+<li><code>&lt;-~&gt;</code> 双箭头单段曲线</li>
+<li><code>~&gt;</code> 单箭头S曲线</li>
+<li><code>-~&gt;或~-&gt;</code> 单箭头单段曲线 二者弯向的方向不同</li>
+</ul>
+<h2 id="Step-9-Some-code-一些代码"><a href="#Step-9-Some-code-一些代码" class="headerlink" title="Step 9. Some code 一些代码"></a>Step 9. Some code 一些代码</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(function (bits<span class="punctuation">,</span> ticks) <span class="punctuation">&#123;</span></span><br><span class="line">  var i<span class="punctuation">,</span> t<span class="punctuation">,</span> gray<span class="punctuation">,</span> state<span class="punctuation">,</span> data = <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span> arr = <span class="punctuation">[</span><span class="punctuation">]</span>;</span><br><span class="line">  for (i = <span class="number">0</span>; i &lt; bits; i++) <span class="punctuation">&#123;</span></span><br><span class="line">    arr.push(<span class="punctuation">&#123;</span>name<span class="punctuation">:</span> i + &#x27;&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;&#x27;<span class="punctuation">&#125;</span>);</span><br><span class="line">    state = <span class="number">1</span>;</span><br><span class="line">    for (t = <span class="number">0</span>; t &lt; ticks; t++) <span class="punctuation">&#123;</span></span><br><span class="line">      data.push(t + &#x27;&#x27;);</span><br><span class="line">      gray = (((t &gt;&gt; <span class="number">1</span>) ^ t) &gt;&gt; i) &amp; <span class="number">1</span>;</span><br><span class="line">      arr<span class="punctuation">[</span>i<span class="punctuation">]</span>.wave += (gray === state) ? &#x27;.&#x27; <span class="punctuation">:</span> gray + &#x27;&#x27;;</span><br><span class="line">      state = gray;</span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  arr.unshift(&#x27;gray&#x27;);</span><br><span class="line">  return <span class="punctuation">&#123;</span>signal<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span>name<span class="punctuation">:</span> &#x27;bin&#x27;<span class="punctuation">,</span> wave<span class="punctuation">:</span> &#x27;=&#x27;.repeat(ticks)<span class="punctuation">,</span> data<span class="punctuation">:</span> data<span class="punctuation">&#125;</span><span class="punctuation">,</span> arr</span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">&#125;</span>;</span><br><span class="line"><span class="punctuation">&#125;</span>)(<span class="number">5</span><span class="punctuation">,</span> <span class="number">16</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可能是某种自动化？不知道用什么语言运行，我也不会js，这一块压根没看hh。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/learning/"># learning</a>
+                    
+                        <a href="/tags/FPGA/"># FPGA</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/07/07/%E6%97%A9%E7%9D%A1%E6%89%93%E5%8D%A1%E5%B8%96/">早睡打卡帖</a>
+            
+            
+            <a class="next" rel="next" href="/2025/05/10/%E4%B8%80%E4%BA%9B%E5%BC%82%E6%83%B3%E5%A4%A9%E5%BC%80/">一些异想天开</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

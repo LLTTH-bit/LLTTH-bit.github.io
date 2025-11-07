@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>Excerpts-Spectra-of-quantized-signals | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Excerpts-Spectra-of-quantized-signals</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 1, 2025&nbsp;&nbsp;15:03:03</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/ADC/">ADC</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p>看ADC测试，在量化噪声那一块儿遇到了一个问题-输入正弦波时，为什么可以把输入信号看作均匀分布的？</p>
+<p>之前写出来pdf，是一个<em>bathtube</em>，我认为可以近似地看成均匀的，只有两侧比较不均匀。但看ADI-MT001中对这个问题似乎有所说明，在一篇上个世纪的文章中提到过，那就不妨看看实际推导。</p>
+<h2 id="部分译文"><a href="#部分译文" class="headerlink" title="部分译文"></a>部分译文</h2><p>语音信号的幅度量化是最近的一项创新。这里我们不允许从连续的幅度域中选取，而是从确定的离散值中选取。这意味着，原始的语音信号会被从可用的离散集合中亿最小误差基础选择的固定值重建的波形取代。显然如果我们让量化值之间的间隔足够近，可以让量化后的波形和原始信号用耳朵分辨不出。幅度量化的目的是，抑制传输介质中的干扰影响。通过使用精密的接收仪器，我们能够恢复接收到的值，而不会受到叠加干扰的任何影响，只要干扰不超过相邻步长的一半。</p>
+<p>通过幅度和时间上量化的结合，我们可以为语音信号编码，因为现在的传输能够在每个离散时间间隔内发送离散的幅度。通过使用二进制表示每个离散的信号幅度，其中只有0和1被使用，这个方法获得了克服干扰的最大优势。十进制中的4在二进制中表示为100，8是1000，16是10000，等等。通常情况下，如果我们在二进制系统中有N位数字位，那么我们可以构建$2^N$个不同的数字。如果需要的离散幅度不超过$2^N$个，那么在每个采样间隔内，可以通过N个开关脉冲的序列来发送完整的信息…</p>
+<hr>
+<p>为了确定用来传输语音信号需要的量化步长数量，我们需要知道失真和步长之间的关系。这正是本文的主题。我们把这个问题分为两部分：仅仅是幅度上的量化；时间量化和幅度量化的结合。前者可以使用简单的“阶梯转换器”处理，是有着图1中输入输出曲线的设备。<br><img src="/2025/03/01/Excerpts-Spectra-of-quantized-signals/figure1.png" alt="Figure1"><br>阶梯转换器上的信号被分为不同的电压切片，所有的在切片中止的正负一半步长以内的信号，都被这个中值所替代。当输入是一个光滑变化的时间函数时，对应输出是图2中的样子：<br><img src="/2025/03/01/Excerpts-Spectra-of-quantized-signals/figure2.png" alt="Figure2"><br>如果有大量的小步长，那么误差信号类似于一系列斜率不同的直线，但几乎一直在正负一半步长的间隔内延申。紧密的相隔步长的极限情况，让我们能够相当简单地推导出均方误差意义上相当接近的值，稍后将会证明在大多数相当重要的情形下是足够精准的。如果$E_0$是一个步长，s是斜率，那么典型的误差线表示为：<br>$$\epsilon&#x3D;st,-\frac{E_0}{2s}&lt;t&lt;\frac{E_0}{2s}$$<br>这里$\epsilon$是误差，t是相对于中点的时间，那么均方误差就是：<br>$$\epsilon^2&#x3D;\frac{E_0^2}{12}$$<br>积分过程略去。</p>
+<p>并不是所有的失真都落在信号频带里面。失真可能是非线性特性带来的。高阶调制得到的结果可以通过滤波除去。因此，计算误差波形的频谱就十分重要了。下一个部分我们将会进行</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/learning/"># learning</a>
+                    
+                        <a href="/tags/paper/"># paper</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/03/06/%E8%AF%BB%E6%96%87%E7%8C%AE%EF%BC%9A%E5%85%A8MOS%E7%94%B5%E8%8D%B7%E5%86%8D%E5%88%86%E9%85%8D%E6%A8%A1%E6%95%B0%E8%BD%AC%E6%8D%A2%E6%8A%80%E6%9C%AF%E2%85%A0/">读文献：全MOS电荷再分配模数转换技术Ⅰ</a>
+            
+            
+            <a class="next" rel="next" href="/2025/02/27/ADC-some-question/">ADC-some-question</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

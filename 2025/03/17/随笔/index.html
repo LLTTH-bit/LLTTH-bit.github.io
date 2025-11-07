@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>随笔 | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">随笔</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 17, 2025&nbsp;&nbsp;0:32:55</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="25-3-17"><a href="#25-3-17" class="headerlink" title="25&#x2F;3&#x2F;17"></a>25&#x2F;3&#x2F;17</h2><p>看完四篇paper，写了段matlab，至少把pipeline ADC基本行为搞明白了。</p>
+<p>Razavi什么时候能学个大概？什么时候去找AMSV的老师？到底要不要考研呢？</p>
+<p>我的内心十分纠结，昨天的我甚至会跳出来否定今天的我。始终在一个想法的肯定与否定间徘徊。到底值不值得，自己有能否掌握考研的整个过程？我还不知道。下个月再说。</p>
+<h2 id="25-3-18"><a href="#25-3-18" class="headerlink" title="25&#x2F;3&#x2F;18"></a>25&#x2F;3&#x2F;18</h2><p>832分数线出了。其实不高，感觉自己现在开始好好准备，应该没什么问题。</p>
+<p>但是不想放弃唾手可得的澳大，内心又很想留在北京，不管是内心执念，还是为了日后前程……</p>
+<p>今天又看到一篇帖子。感觉人确实需要一个精神寄托。当这个寄托包含了你对家乡，对过去的复杂情感，又怎么能抵挡住呢……</p>
+<h2 id="25-3-26"><a href="#25-3-26" class="headerlink" title="25&#x2F;3&#x2F;26"></a>25&#x2F;3&#x2F;26</h2><p>最近又思考了很多，包括自己到底应不应该考研，到底应该去哪里？</p>
+<p>去澳大吧，感觉title没法为自己托底；去考研吧，又害怕自己耽搁一年时间。</p>
+<p>但我认为，应该搞清楚自己想要什么。到底想要更高的上限，还是想要下限。</p>
+<p>越来越想考研了……</p>
+<h2 id="25-3-30"><a href="#25-3-30" class="headerlink" title="25&#x2F;3&#x2F;30"></a>25&#x2F;3&#x2F;30</h2><p>最近电子系和集成电路学院都录取了，出了结果，网上看到很多。</p>
+<p>还是那么说，搞清楚自己想要什么。去澳门上限肯定更高，如果真能发i&#x2F;j肯定高薪无忧。但我其实应该更想有稳定的下限。而电子系考信号和电磁场，这两门都是探囊取物，于我而言。</p>
+<p>所以我买了数学教材，要不直接开始？其实老师的意见没那么重要，他肯定不知道我到底什么情况。再说真想去澳大，博士再去也不急……</p>
+<p>所以还是考研！四月底开始吧！</p>
+<h2 id="25-4-10"><a href="#25-4-10" class="headerlink" title="25&#x2F;4&#x2F;10"></a>25&#x2F;4&#x2F;10</h2><p>最近事情很多，结课，考试，大作业都来了，考研也到了不得不抉择的时候。每个早八的时候我都会感觉很累，很害怕，仿佛回到了高三那段时间，每天披星戴月睡眼朦胧。但是白天精神好起来之后又是精神焕发。</p>
+<p>这周就要做决定了，周末跟老师聊一聊，看看别人的意见。并且要表达自己内心的想法，尤其是去Macau的不安，这样才能做出正确的抉择。</p>
+<h2 id="25-4-16"><a href="#25-4-16" class="headerlink" title="25&#x2F;4&#x2F;16"></a>25&#x2F;4&#x2F;16</h2><p>第一次经历这么亲的亲人离世，我的弟弟硕硕。除了弟弟以外的最亲的关系。</p>
+<p>我现在还觉着非常不真实，返校之前我还去大爷家吃饭，那时候他还好好的，一直在玩植物大战僵尸。可能因为我不在家，我还不敢相信，为什么好好的人就没了。</p>
+<p>爸爸没说他没了的原因，但是说了像这样抢救也有可能，只是后半辈子都是植物人，这样毁了大爷大娘的后半生。应该是自己想不开了吧。我非常想听到，他是得了什么急病，身体不好然后去世，实在不想听到他是自杀。</p>
+<p>应该今天就葬了，现在感觉人的生命非常渺小，脆弱的血肉，可能就是一团物质的集合。说没就能没。真的非常不真实。两个月前还能见到的人，怎么就突然没了。</p>
+<p>替大爷大娘以及爷爷奶奶伤心。中年丧子是多大的打击，大爷一直是家里的顶梁柱，如果是他们爆发争吵之后的结果，可能他会更后悔。爷爷奶奶早就经历了白发人送黑发人。</p>
+<p>还是非常的不真实，虽然我除了过年和暑假并不会回家，但是和自己相差不到一岁的弟弟没了，还是很恍惚。如果清明那天我能跟他多说几句就好了。我这个哥哥还是太不称职了，以至于嫂子当时都不知道我们俩谁大一点。</p>
+<h2 id="25-4-21"><a href="#25-4-21" class="headerlink" title="25&#x2F;4&#x2F;21"></a>25&#x2F;4&#x2F;21</h2><p>最近事情有些太多，亲人离世仍然觉得很不真实。那天在南食堂三楼不小心把残食台的碗蹭翻，又想起来过年时候我把汤打翻。仿佛就在眼前，感觉那时候还是好好的。我现在希望下次问爸爸，硕硕是为什么去世的，是疾病，这样我还心安一点。</p>
+<p>然后，未来的发展或许也要慎重考虑。就去澳门吧！如果能去Ivor的组里做ADC，或许是非常值得的。如果申请不到，那我就去考研吧。现在先为了ADC而努力。</p>
+<p>人还是不能看的太开，那样会丧失奋斗的动力。</p>
+<h2 id="25-4-22"><a href="#25-4-22" class="headerlink" title="25&#x2F;4&#x2F;22"></a>25&#x2F;4&#x2F;22</h2><p>今天给家里打了电话，问了硕硕的原因。从屋顶掉下来，最后没能救回来。</p>
+<p>哎，人生无常，明天和意外不知哪一个先来临。</p>
+<p>不过得知他不是自己想不开，还是稍有宽慰。至少出事之前他没有太大的怨恨，至少大爷大娘和爷爷奶奶不会太难受…</p>
+<h2 id="25-5-6"><a href="#25-5-6" class="headerlink" title="25&#x2F;5&#x2F;6"></a>25&#x2F;5&#x2F;6</h2><p>今天是五一假期的最后一天。感觉这个假期没有得到精神上的放松。可能是需要处理的事情太多了……</p>
+<p>ADC学习的路线大致清晰了一点，做完matlab模型之后应该就是开关模型、比较器模型？应该一个多月也能应付的过来。我希望六月中旬的时候，能够比较自信地去找老师。但是比较紧迫的问题是，模集还没学完，有点头痛。我现在想的是每天早上进行模集的学习，早睡早起！在搭实际电路的同时学习……</p>
+<h2 id="25-5-18"><a href="#25-5-18" class="headerlink" title="25&#x2F;5&#x2F;18"></a>25&#x2F;5&#x2F;18</h2><p>五月快要结束了，考试的事情多了起来，同时距离联系老师的DDL也近了。今天晚上梳理一下</p>
+<ul>
+<li>雷达前沿技术：周一到周五，每天三小时+，一天三章。做纸质笔记。今晚回去找一下纸笔。每一章作业都要把习题课看了。</li>
+<li>汇编语言：考完雷达前沿技术后，一周内把实验内容写完：软硬件。写完实验报告后首先复习四五六章，因为没有学会……</li>
+<li>信息安全与对抗：周三做实验，同时周三下午开始写论文，周末结束一篇</li>
+<li>雷达信号处理：考完前沿技术后，每周开始做作业。后面复习压力应该不会太大</li>
+<li>深度学习基础：考完雷达前沿后开始复习，写代码</li>
+</ul>
+<p>同时，模拟集成电路与ADC-learning需要继续推进。周一开始，每天23：30开始学习，周一进行ADC-learning，周二进行模集学习。周末去找集电同学索要运放讲义。</p>
+<p>还有一个月时间！！！！！！联系澳大老师！！！！！！</p>
+<p>同时注意华5夏令营，能投的都投一下吧，集成电路学院。虽然10%的rk入营概率都很小……</p>
+<h2 id="25-5-30"><a href="#25-5-30" class="headerlink" title="25&#x2F;5&#x2F;30"></a>25&#x2F;5&#x2F;30</h2><p>五月的最后一天。考试只剩两门，但是压力一点不少……</p>
+<p>课业压力肯定是首位的。还剩两门考试，计算机原理是最令人头大的一门。因为我之前没有好好学。但是没办法，一周时间，勇敢面对吧。</p>
+<p>然后就是深度学习，以及信息对抗的论文和实验。只能说慢慢来吧，还有一个月时间。</p>
+<p>最关键的就是ADC学习以及陶瓷老师了。6.15是教学周最后一天。我应该在17轴，也就是考试周的第一周去套老师。现在就是先复现前两篇论文，然后模型改成差分。然后一鼓作气。能做多少是多少吧……</p>
+<h2 id="25-7-7"><a href="#25-7-7" class="headerlink" title="25&#x2F;7&#x2F;7"></a>25&#x2F;7&#x2F;7</h2><p>今天，课内的所有任务都结束了，然后也缓冲了两天。今天开始早早睡觉吧，一会开个帖子打卡。</p>
+<p>很久没跑步了，今天换上Boston12去中关村操场跑了2k，这也是来了中关村以后第一次跑步。</p>
+<p>我喜欢运动结束以后的感觉，我能感觉心脏在砰砰跳动，流出的汗液给人一种真实感，让我感受到我还活着。拉伸的时候，酸痛的肌肉，给我一样的感觉。这个时候我才能清楚地感觉，我还活着</p>
+<h2 id="25-8-10"><a href="#25-8-10" class="headerlink" title="25&#x2F;8&#x2F;10"></a>25&#x2F;8&#x2F;10</h2><p>在8月8日给ivor chan发了邮件，但是很快就已读不回。这是哪些意思呢？不管了，无论如何还是等几天吧。</p>
+<p>如果一周还是已读不回，那我就去联系郭铭强老师？我估计很难在内地其他地方拿到offer了……</p>
+<p>无论如何，先等几天吧，后面再说。实在不行就去考研呗，多大的事儿。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%94%9F%E6%B4%BB/"># 生活</a>
+                    
+                        <a href="/tags/%E5%B1%95%E6%9C%9B/"># 展望</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/03/19/%E4%B8%93%E4%B8%9A%E7%9B%B8%E5%85%B3%E9%9A%8F%E7%AC%94/">专业相关</a>
+            
+            
+            <a class="next" rel="next" href="/2025/03/15/%E8%AF%BB%E6%96%87%E7%8C%AE%EF%BC%9A%E4%B8%A4%E4%B8%AAADC%E7%9A%84%E6%95%85%E4%BA%8B-Razavi/">读文献：两个ADC的故事-Razavi</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

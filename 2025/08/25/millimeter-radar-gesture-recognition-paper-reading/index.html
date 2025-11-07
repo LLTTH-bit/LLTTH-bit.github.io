@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>millimeter-radar-gesture-recognition:paper-reading | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">millimeter-radar-gesture-recognition:paper-reading</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 25, 2025&nbsp;&nbsp;10:05:05</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B8%9A/">学业</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>小学期-空天院实习，选择的课题是：毫米波雷达手势识别算法研究，基于C3D-CNN实现。正好上个学期学习了雷达信号处理相关知识，以及深度学习，这个题目就能用上。</p>
+<p>使用调频连续波（FMCW）雷达，对雷达回波进行2D-FFT，得到每一帧的RD图，然后使用IC3D网络进行动态的姿势识别。</p>
+<p>随着AI时代的到来（advent），人手势识别正在吸引越来越多注意力。已经有很多的手势识别方法被提出，主要分为<strong>可穿戴式</strong>和<strong>非接触式</strong>传感器。</p>
+<p>可穿戴式，就是在人身上穿戴加速计、磁力计和陀螺仪等，这样精准快速，但是是笨重且易丢失的。</p>
+<p>非接触式的又能分为：视觉型、基于红外传感器（infrared）的、基于超声（ultrasonic）波的、基于电磁信号的。</p>
+<p>视觉型的有点事不需要沉重的传感器、能快速人机交互，但确定是需要高分辨率摄像头与特定的工作环境，且使用摄像头进行识别会带来潜在的隐私风险。</p>
+<p>红外型的并不是直接检测人手发出的红外光，而是使用可控强度（intensity）的内置红外LED灯照亮人手，接收反射回来的红外光进行识别。缺点是传感器前面有障碍物时，会影响性能。</p>
+<p>使用无线信号的手势识别方法大多数使用WiFi信号，成本低廉且应用广泛。这种方法即使在光照不足的情况下可能实现好的识别效果，且不会危害用户隐私，但缺点是接收信号时会产生多径效应，影响估计的精度。</p>
+<p>相比于上面这些，<strong>雷达</strong>作为手势识别的传感器，就有很多优点了。其对工作环境没有特定要求，在全天气环境下均可使用，不会危害用户隐私，且能穿墙识别。</p>
+<p>当然，使用雷达进行手势识别也存在着一些问题，如下：</p>
+<ol>
+<li><strong>数据采集</strong>。使用雷达进行数据采集是较为耗时的，因此需要建立使用少量样本进行识别的模型。</li>
+<li><strong>检测和分类的同步进行</strong>。需要同时检测有无手势以及分类手势类型，避免两个动作之间出现较大延迟。</li>
+<li><strong>时空信息的提取</strong>。大部分模型没有考虑帧间信息的关联性。</li>
+<li><strong>模型复杂度</strong>。由于手势识别对计算复杂度与速度有较高要求，设计一个通用、紧凑、高效且轻量化的网络是很重要的。</li>
+</ol>
+<p>本文提出的IC3D网络，在C3D的基础上减少了卷积层和全连接层的数量，同时更改了优化算法、激活函数等部分，实现了较高的准确率。</p>
+<h2 id="Composition-of-the-system"><a href="#Composition-of-the-system" class="headerlink" title="Composition of the system"></a>Composition of the system</h2><p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/composition.png" alt="system"></p>
+<p>整个手势识别系统的组成如上图所示，部署在PC上，通过一台毫米波雷达采集信，经过信号处理得到RD图，再经过过IC3D网络，通过softmax层后得到结果。</p>
+<h2 id="Radar"><a href="#Radar" class="headerlink" title="Radar"></a>Radar</h2><p>雷达部分，使用锯齿波调制的FMCW雷达，也就是之前学过的Chirp信号。发射信号经过延迟$\Delta t_d$后得到回波信号。将发射信号与回波信号相乘后经过低通滤波器，即可得到稳定的IF中频信号。如下图所示：</p>
+<p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/IF.png" alt="IF"></p>
+<p>处理后得到的中频信号表达式如下所示：</p>
+<p>$S_{IF}(t) &#x3D; S_R (t) \cdot S_T(t) &#x3D; \frac{1}{2}A_R A_T cos{2\pi[(f_c \cdot \Delta t_d)+(S\cdot \Delta t_d - \Delta f_d)t]}$</p>
+<p>IF信号的形式如下图所示，其频率固定：</p>
+<p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/IF2.png" alt="IF2"></p>
+<p>根据雷达回波能够提取出距离-速度等参数，但是这对我们不是很重要。</p>
+<p>在参考的本篇文献中，使用的雷达是德州仪器的 IWR1642BOOST 和 DCA1000EVM 毫米波雷达。其发射波形如下图所示：</p>
+<p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/chirp.png" alt="chirp"></p>
+<p>Chirp信号和采样参数的设置如下表所示：</p>
+<p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/setting.png" alt="setting"></p>
+<p>这样，一个chirp信号的时长是$100\mu s$，每帧信号中包含128个chirp，计算得一帧的时长是$12.8ms$.</p>
+<p>但每帧的周期设置为$112ms$，因此8帧的时长为$0.896s$。</p>
+<p>这样，每个chirp信号采256个点，每帧信号包含128个chirp，那么每帧信号的尺寸为256x128.</p>
+<p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/matrix.png" alt="mATRIX"></p>
+<p>对每帧回波，先在距离维上加窗后进行一次FFT，称为距离维FFT；然后再在chirp维上进行一次FFT，称为速度维FFT。这样即可得到距离-多普勒热力图，即常说的R-D图，如下图所示：</p>
+<p><img src="/2025/08/25/millimeter-radar-gesture-recognition-paper-reading/RD.png" alt="RD"></p>
+<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><p>前人的工作中，提出了3D CNN来提取时间序列信息，该网络包含 8 个卷积层、5 个池化层、2 个全连接层和 1 个 softmax 分类层。</p>
+<p>本文中提出的改进包括以下部分：</p>
+<ol>
+<li>减少卷积层和池化层数量。</li>
+<li>降低输入参数的数量，输入尺寸降低为8帧-40x40图像。</li>
+<li>采用Adam优化算法。</li>
+<li>使用Mish激活函数。</li>
+</ol>
+<p>最终的网络架构包括 3 个卷积层、3 个池化层、2 个全连接层以及 1 个 softmax 层。所有卷积层的卷积核大小均为 3×3×3，步幅为 1×1×1。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/learning/"># learning</a>
+                    
+                        <a href="/tags/radar/"># radar</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/09/30/%E4%BF%9D%E7%A0%94%E7%BB%93%E6%9D%9F%E5%90%8E/">保研结束后</a>
+            
+            
+            <a class="next" rel="next" href="/2025/08/14/Edge-AI-Intro/">Edge-AI-Intro</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

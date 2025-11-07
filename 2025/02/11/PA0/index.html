@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LLTTH">
+
+
+
+
+
+<title>PA0 | LLTTH&#39;blog</title>
+
+
+
+    <link rel="icon" href="/star.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LLTTH&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LLTTH&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">PA0</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LLTTH</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 11, 2025&nbsp;&nbsp;18:06:35</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/ysyx/">ysyx</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h2><p>PA0是GNU&#x2F;Linux环境开发配置的指南，我们将会被引导安装GNU&#x2F;Linux开发环境，所有的PA和实验都会在这个环境中完成。这个文档要仔细读，如果遇到了一些文档中没提到的问题，回来重新看。机器永远是对的。</p>
+<p>我们将安装Ubuntu 22.04。真机地稳定性会比虚拟机相对高一些，性能也更高一些。所以还是用真机！</p>
+<p>搜索“Ubuntu 22.04安装教程”，跟着指导继续做。（不要使用UbuntuSoftware Updater。选择语言时不要选择中文）</p>
+<p>选择虚拟机安装，真机安装还是太麻烦了，如果有两台电脑或许可以选择真机……</p>
+<h2 id="First-Exploration-with-GNU-Linux"><a href="#First-Exploration-with-GNU-Linux" class="headerlink" title="First Exploration with GNU&#x2F;Linux"></a>First Exploration with GNU&#x2F;Linux</h2><p>ctrl+Alt+T 一键打开终端，显示</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username@hostname:~$</span><br></pre></td></tr></table></figure>
+
+<p>说明现在的工作目录是<code>~</code><br>GUI似乎不见了，取而代之的是终端，全部是命令行接交互（CLI Command Line Interface）.使用CLI可以做你想做的任何事情。<br>GUI在需要高度定义的显示的时候，比如看电影时，或许更胜一筹；其他时候或许CLI更好。</p>
+<p>输入下面这行命令可以看看Ubuntu占用了多少空间：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -h</span><br></pre></td></tr></table></figure>
+
+<p>关闭系统的时候，使用下面的命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poweroff</span><br></pre></td></tr></table></figure>
+
+<h2 id="Installing-Tools"><a href="#Installing-Tools" class="headerlink" title="Installing Tools"></a>Installing Tools</h2><p>在GUN&#x2F;Linus中，可以通过一行命令下载和安装软件，这在Windows上是很困难的。这是通过package manager实现的。不同的GUN&#x2F;Linux发行版有不用的package manager，在Ubuntu中，package manager叫做<code>apt</code>.</p>
+<p>将会从网络镜像下载和安装PA需要的工具。使用网络镜像之前，需要检查一些系统能否上网。</p>
+<h3 id="Checking-network-state"><a href="#Checking-network-state" class="headerlink" title="Checking network state"></a>Checking network state</h3><p>通过下面这个命令ping一下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping www.baidu.com -c 4</span><br></pre></td></tr></table></figure>
+
+<p>更改多次设置终于让虚拟机上去网了，太不容易~</p>
+<h3 id="Setting-APT-source-file"><a href="#Setting-APT-source-file" class="headerlink" title="Setting APT source file"></a>Setting APT source file</h3><p>运行下面的命令来更新APT源文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i &quot;s/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g&quot; /etc/apt/sources.list&quot;</span><br></pre></td></tr></table></figure>
+
+<p>但权限不够。因为APT源文件为root所有。一个解决方案是切换到root账户。为了避免切换，一个可行的解决方案是使用<code>sudo</code>。如果一个操作需要更高级用户许可，那么在操作前面加上<code>sudo</code>。在使用<code>sudo</code>之前，需要将账户加入到<code>sudo</code>group中。但首先还是要进入到root账户中。<br>切换到root账户，后成功加入了<code>sudo</code>群。root账户的密码是936042.<br>记得：使用需要权限的命令时加上<code>sudo</code>！</p>
+<h3 id="Updating-APT-package-information"><a href="#Updating-APT-package-information" class="headerlink" title="Updating APT package information"></a>Updating APT package information</h3><p>输入下面命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+
+<p>其中遇到了讲义中预料到的错误，额外运行一条命令后再次运行上面的命令即可。</p>
+<h3 id="Installing-tools-for-PAs"><a href="#Installing-tools-for-PAs" class="headerlink" title="Installing tools for PAs"></a>Installing tools for PAs</h3><p>安装了一系列工具，这些工具的用途后面会解释。</p>
+<h3 id="Installing-Chinese-input-method"><a href="#Installing-Chinese-input-method" class="headerlink" title="Installing Chinese input method"></a>Installing Chinese input method</h3><p>上网搜寻如何在Ubuntu中安装中文输入法。已经实现。</p>
+<h2 id="Configuring-vim"><a href="#Configuring-vim" class="headerlink" title="Configuring vim"></a>Configuring vim</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install vim</span><br></pre></td></tr></table></figure>
+
+<p>vim被称为编辑器之神。后面的实验和PA的代码都会在vim中编写，其他文件也是。</p>
+<h3 id="Learning-vim"><a href="#Learning-vim" class="headerlink" title="Learning vim"></a>Learning vim</h3><p>我们将会被要求用<code>vim</code>来修改一个文件。<code>vim</code>中的操作和其他我们曾使用过的编辑器大有不同。学习<code>vim</code>需要指导，有两种方式：</p>
+<ul>
+<li>在终端中执行<code>vimtutor</code>命令。将会推出一个<code>vim</code>的指导。这个是更推荐的</li>
+<li>上网搜索“vim教程”，会搜到很多。记得使用<code>vim test</code>命令进行练习</li>
+</ul>
+<h2 id="More-Exploration"><a href="#More-Exploration" class="headerlink" title="More Exploration"></a>More Exploration</h2><h3 id="Learning-to-use-basic-tools"><a href="#Learning-to-use-basic-tools" class="headerlink" title="Learning to use basic tools"></a>Learning to use basic tools</h3><p>看<code>small tutorial for GNU/Linux written by jyy</code>，完成三个必做题：</p>
+<ol>
+<li>Write a “Hello World” program under GNU&#x2F;Linux √</li>
+<li>Write a Makefile to compile the “Hello World” program √</li>
+<li>Learn to use GDB <code>a small tutorial for GDB</code></li>
+</ol>
+<h3 id="small-tutorial-for-GNU-Linux"><a href="#small-tutorial-for-GNU-Linux" class="headerlink" title="small tutorial for GNU&#x2F;Linux"></a>small tutorial for GNU&#x2F;Linux</h3><p>这里的很多命令在<code>Missing Semester</code>里面看过了，记录一些有用的东西。</p>
+<p>统计代码行数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . | grep <span class="string">&#x27;\.c$\/\.h$&#x27;</span> | xargs <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意，<code>xargs</code>命令的应用，搞清楚标准输入是将输入直接当作文件处理。</p>
+<p>统计磁盘：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">du</span> -sc /usr/share/* | <span class="built_in">sort</span> -r | less</span><br></pre></td></tr></table></figure>
+
+<p><code>less</code>命令的使用，对于较长的输出可以上下翻页。</p>
+<p>键入命令时，如果有个目录特别长，可以用<code>TAB</code>自动补全，会有奇效。</p>
+<p>C程序编译：对于一个写好的c程序<code>hello.c</code>，运行<code>gcc</code>命令<code>gcc hello.c -o hello</code>就能将其编译成可执行文件<code>hello</code>。当然，可执行文件的名字是可以自己改的。不使用<code>-o</code>选项会默认生成<code>a.out</code>的文件。</p>
+<p>Makefile管理工程：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">hello:hello.c</span></span><br><span class="line">    gcc hello.c -o hello    <span class="comment"># 注意开头的tab, 而不是空格</span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm hello    <span class="comment"># 注意开头的tab, 而不是空格</span></span><br></pre></td></tr></table></figure>
+
+<p>运行命令<code>make</code>执行编译，运行命令<code>make clean</code>来清除已经编译好的<code>hello</code></p>
+<p>GDB：<br>GDB是一个历史悠久且全面的Linux debug工具。<br>约定：<code>#</code>代表需要使用<code>sudo</code>命令来执行，<code>$</code>代表普通非特权用户执行。<br>费劲九牛二虎之力，终于能够直接在当前路径生成<code>core</code>文件了<br>编译并执行后，得到了<code>core</code>文件。这时候运行下面的命令：<code>gdb ./test.out ./core.xxxxxx</code>即可打开<code>core</code>文件。在这个界面可以进行很多交互的操作，查看不同帧时候的信息。</p>
+<h3 id="Installing-tmux"><a href="#Installing-tmux" class="headerlink" title="Installing tmux"></a>Installing tmux</h3><p><code>tmux</code>:<br>terminal multiplexer，能够开好几个终端。这里记录一下常用命令。</p>
+<ul>
+<li><code>tmux</code>：新建一个窗口</li>
+<li><code>tmux new -s name</code>：新建一个窗口，指定它的名字</li>
+<li><code>tmux ls</code>：列出所有窗口</li>
+<li><code>tmux attach</code>：连接到最近访问的一个窗口</li>
+<li><code>tmux kell-session -t name</code>：删除对应名称的窗口</li>
+<li><code>tmux kill-server</code>：中止所有<code>tmux</code>对话</li>
+</ul>
+<p>下面包含<code>&lt;CTRL&gt;+b</code>的命令，都是在<code>tmux</code>窗口内部进行的。省略它们前面的<code>&lt;CTRL&gt;+b</code>。通过修改<code>~</code>目录下的<code>.tmux.conf</code>文件，将<code>b</code>键改成了<code>a</code>：</p>
+<ul>
+<li><code>%</code>：水平分割窗口</li>
+<li><code>&quot;</code>：垂直分割窗口</li>
+<li><code>n/p</code>：切换到后一个&#x2F;前一个窗口</li>
+<li><code>d</code>：分离窗口，回到正常的终端而不是<code>tmux</code></li>
+<li><code>w</code>：快速切换窗口</li>
+</ul>
+<h2 id="getting-source-code-for-PAs"><a href="#getting-source-code-for-PAs" class="headerlink" title="getting source code for PAs"></a>getting source code for PAs</h2><p>进行了一些配置，运行了<code>make</code> <code>make clean</code>等命令。等待PA1再修改这里的错误。</p>
+<p>需要注意的是，对<code>ysyx</code>学习，需要使用<code>git log tracer-ysyx</code>查看代码跟踪。</p>
+<p>使用<code>git commit --allow-empty</code>命令，允许文件没有改变但需要提交的情形。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>LLTTH</span>
+                    </p>
+                
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Live Life To The Healthiest.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/learning/"># learning</a>
+                    
+                        <a href="/tags/CS/"># CS</a>
+                    
+                        <a href="/tags/linux/"># linux</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/02/12/%E6%AD%A3%E6%9C%88%E5%8D%81%E4%BA%94%E8%AE%B0/">正月十五记</a>
+            
+            
+            <a class="next" rel="next" href="/2025/02/11/git/">Git学习</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LLTTH | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
