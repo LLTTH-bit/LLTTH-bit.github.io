@@ -166,71 +166,6 @@
                 <div class="container">
     
     
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">Back to top</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
-
-<script>
-    var tocbot_timer;
-    var DEPTH_MAX = 6; // 为 6 时展开所有
-    var tocbot_default_config = {
-        tocSelector: '.tocbot-list',
-        contentSelector: '.post-content',
-        headingSelector: 'h1, h2, h3, h4, h5',
-        orderedList: false,
-        scrollSmooth: true,
-        onClick: extend_click,
-    };
-
-    function extend_click() {
-        clearTimeout(tocbot_timer);
-        tocbot_timer = setTimeout(function() {
-            tocbot.refresh(obj_merge(tocbot_default_config, {
-                hasInnerContainers: true
-            }));
-        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
-    }
-
-    document.ready(function() {
-        tocbot.init(obj_merge(tocbot_default_config, {
-            collapseDepth: 1
-        }));
-    });
-
-    function expand_toc() {
-        var b = document.querySelector('.tocbot-toc-expand');
-        var expanded = b.getAttribute('data-expanded');
-        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
-        tocbot.refresh(obj_merge(tocbot_default_config, {
-            collapseDepth: expanded ? 1 : DEPTH_MAX
-        }));
-        b.innerText = expanded ? 'Expand all' : 'Collapse all';
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    function obj_merge(target, source) {
-        for (var item in source) {
-            if (source.hasOwnProperty(item)) {
-                target[item] = source[item];
-            }
-        }
-        return target;
-    }
-</script>
-    
 
     
     <article class="post-wrap">
@@ -260,16 +195,18 @@
         </header>
 
         <div class="post-content">
-            <h2 id="开辟专栏的原因"><a href="#开辟专栏的原因" class="headerlink" title="开辟专栏的原因"></a>开辟专栏的原因</h2><p>很多时候感觉自己有很多想说的、想总结的，如果不写成文字恐怕会遗忘，那就写出来吧。</p>
-<p>写了放在哪儿？放在朋友圈恐怕是不妥的，显得矫情是一回事，我也不想让每一个微信好友窥探到我的内心。因此选择写了放到博客。我的朋友大概是不会主动来看的，除非我写了知乎双平台的文章求他们点赞。</p>
-<p>放在随笔专栏，又恐被流水账所淹没。因此开新专栏“波澜”。</p>
-<h2 id="专栏名字由来"><a href="#专栏名字由来" class="headerlink" title="专栏名字由来"></a>专栏名字由来</h2><p>为什么叫“波澜”呢？其实我是想总结自己的内心历程，写一些大概会包含“成长”的内容。成长的过程中是必然充斥着情感的，无论是亲情、爱情、友情，或者是对这个世界的情感。情感的波澜正是我的文字的源头。故而起名。</p>
-<h2 id="专栏会包含的内容"><a href="#专栏会包含的内容" class="headerlink" title="专栏会包含的内容"></a>专栏会包含的内容</h2><p>首先我想记录的是“感情”的波澜，狭义或者片面的男女之爱。尽管我失败的感情历程没有卷起过一朵浪花，但海上的颠簸还是让我感慨颇多。就好像差生文具多，穷则思变，我想你应该懂我意思。我想记录一下自己观念的变化。但需要说明的是，2025-11-05之前发生的事件中的女主角均不是我的女朋友，我也会彻底模糊相关信息，让我的朋友们也看不出来是谁。所以如果你不小心点开了我的专栏和文章，不要点开微信批判我，最后也别背后蛐蛐我。</p>
-<p>然后就是记录一些内心充盈或者崩塌的瞬间吧。我觉得这也是有意义的。</p>
-<p>最后就是一些世界观相关的文章了。</p>
-<p>先想这么多。11-06我会更新第一篇。第一篇内容大致为，解析我高中之前的爱情心理，分析我为什么会对某些人产生好感，又为什么没有追到。</p>
-<p>考研结束后我会写一篇分析自己性格弱点的文章。这个可能花的时间要多一点。好吧。</p>
-
+            <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="错误的。" data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="4493c628d51b53ab2b6b6233148dd40efa8d2e8d222eb01998eb32ea163b4ec6">d8f882ae5b95f5a7d293d910bf962efe176d566a544b7de7e56884ff7f84dbf6a2bac8fd9e6706ecebdc128f2342c0dcbdf0f45fdf1f4b1ce460dcf119bacbc0bf98c0f1c04829fe2e9732eb63ce5a4aa7ec64825585a71efded798b52e44725bf3035248651a6fc09003576510b11caf31bf421ef207dfeab3e4cb2474c29b14384cf9dfd8be0adf607b953c48fb03dfb2e497e0c2a16eba375a1d13e3cc70e019bcb31b061f60025a45be11ec278922dd2abc7c61989b1f8f5303f894a2e1c8d8ecc9586058718061cbab391ac8c412ec85f6b82b48ecb88b74880a1f72efcf1ac03680c3582a351ebf801593e70579b8c00f73973fb95a7f5e34f53bbe87a1cc90216871727963daf97e7de3d80d8282e9649a4dc2872bd76af1dcc5abb3e987613e8e8b2b2f8ca71dd50af9faf19fba10c150a1ab3afe8a989c7fbec72e24d2888a3c24e8342647fd2add5d414cfbadb9f55983b6f55c800674bab42fdc3ded4198bab5ca9e4f025b3a3175c77f1789ae83d24b46fa05fdcab866f661a6f3b0f276e19a0538b52cd3162584eb4e5abd7b99e937ce3ed3c0ce25db497f32cf4e18e8f29641c6173946819c62ef717c2436d3c1bb6e258446879fe83c63fc4cafdf3bb748d42f27f973184db2d5006a4b723937f7af050539a16184405184b81bda12d03a51dc9e6a908f3b22e93c6143e007e4f2e30adb548428c5750e2b6074df042ab7c0172635c1df6e35c5f2fb7d7e76d64762fa74c98a1fe84989b48c19748e097ce8672274d2f9dbe8d8e4fbf91e12a6f8e4463f2196c3ee6a3e1c3edd06c1f67bd7454cbecfcf7802a0bfdc273bdd6002bebe5a8d8142ccb99c5c6f48d3c0d5aa69468f0c58ab98fd66ed425b63f7b93f04dd1dd1b1d8445423f43db5730a42e9f1bdd1c9eba994f84f3769970d40cc83963fac7dc534eb4db97cddc027e0d0b7b7d6e61ce0318335823f988517f9e864d33a105a8e2e8d9dd1545e1872954408780aa219228fae9758ca70c1e1f8ad5e70957c2a4ea18aadcd054234073fa2bda8bad59294f4913bd41269d2603031b823f8758a786636c0b55b7114a057aa15a71898b4a63b1facf30a09a05bb8b8097821f1915bf59a3bd87876f3615f1d010e2e3aac606afe0105cb6aad24c757deb94714cd789e51e757d40d8e2275a8ad794d3256a76c57e47033426c6cf9fda600f51ee15a7c1a44a8be6ba2755b9824613775bdbec4187ff88d483126eb24969f666dffeb47f365a690cc9c667d80bf230a460aad53c0b851453db738f8fb5c02ceee4704447fd037e86d71b4b41022b4247f3f2769011a2aff013c7f87d23aa88f1038860ce4bc42d73426267b3cc0e940496ffae27ffd2a7d38fcb813c707f872f50a0bf41f3a9b9b2500fec7d8e8559cbd12838439ad9eadafa236200f4cf7ed7bf5b2a8c921befb48346b3adc5330c6e3219d7f49634bf54a9af88059df46bb5fe494309d27187e0acf5eae37e9a5451858217b31724e20f04d984ab83510bec306124aca1b0271ddd893fd6bb38024810482bad8e97871189471d6381da0fa981a98de08f9f479b482f4512b3c336a53eccbfd7032dd5124fe959e812dc82a583ac37566fecded27196a0ff368a451e64625315af340a8572868a329cebcb2ee2a9fc8551c740109e97a3f7720d87e4ccb6a7f2bd5355d502aceef085c5001033c6dc8bb74ba3bbc5866f1baca4913dcf1a48c1a2f6e2077ed092f9f743eeeec8fd351e391c907b9cf76adcec96bad2771bd1afd6d2ee8ac6f6b5349e0d190faf0260c4edf929fe205c23a14c0502f11087fa0f0b4986f08cbc5487891a16c7ee64357df3c6258f2f94cf1fd89e86088edea449cd91e118ae0e9effffe19325373380a7088dba8fa661c24a69ff15a4fdf08876c5cfed5fff3ecba321ef397116bc0a34d620accab31ca647096068de039bcba2e30781f835d01e1cbf8b70516ff597a6857bb37fef3ee1095c120950974922db508b885239e59dc0cb42be4b96a18a8b2163e86a6a7d972f62452f1a00ee422f2fe4605b7ecbf35d54278356d97775f95300ca82f04b2a75b50d33b5e170e03017ad79cc78261750e6a7727fd7e21df9c67e3fda9b500ee515b0254b36d385f83bf96fe1b1c19a70dd67a617c72e4151c889e0c9e667ab6fc0fc78b44c4d0c4d6f30001685e03528364be15819cca6b570407e9b39d915469b9c695312d6a5999b4cbe5b10be9310f1240788d43a386e833f66d156be53bf57a55427b427809d7501cdad6d297c87eb45e6de74cce6731ff7e88a174f724070beb8f6a37badd8291527dc40310988143f89f52829133ff192c0ec853076459e4b230cbc56676cddc5abe7e600edab16cfa41f73d4766596ae4d2bd507bc57da60472e16f2d42ed10440d77ba641707ab8e3d1792e69bf94e3f1daf9032851d909ffd48150c34f2626bc48dc2ff959e049fd76a0239ca2b4b713878a989d7d90e95d5e49e2da8e40b4b3d98442be50f3f7bd8779d1d3d09d6458dd22dcf1006efb84b957ebfe748c58a42be817b94d17880ed74d05c04022e40fe904ad3f31326255537cf02207de8f8967d1ab6bcfb3b5b1ed999c0fdcb9b481d1434006347af2e2f7e5d8de16c5f9d59a0b0babbffdb3e6f4fabe799e4f2e06aa00875f0de7225e4b4a5fefdafed4c63862bb93ab97ed62f867fcd86f8cff47ecb4c393302d2502eaa815d08be713561d705a3e40be1deb696870d6cdc0d23a34f415b93c6fec07a4c33b8b7b349e09ccc2387bedc412cae26b320534897ed536bd06004ca1e032f7449d9fc564ce5a08dd275e8c53dda2867f5f21b8d53ef081abc842c24200998bfa6c228d6e43359264c93e7c735892b6c6e0e2463f5c421d40756ea5b497f566e25a8f10f04472bba0648141aabf26de2147da00f2dddb2e880afb08318d5a01297b5d2c5f933e25d2668d974e5f57dca41110b22bc9a00638db6650dcbfb31ad1b314ba2c8e7f227f5807c17dc4b3f7ac967d5127904dcf8979cf07158694f27fe95b864e04ac61aae4b91da7c18d2475f34d804e880e6e6c2eb122f33602635b0013534c85a79ffa6fa3be5f998b1c98829827ce103bcd7dd5be324bfe8c631618fda27ccb88b0a7baf198caae8fccb952672f410ce05741c5d8fc0a214f1d8172fab4dd5a219f89d7dd66d5b07ddd5162f49843e68e2a399170ea75644e8b128530b2b9a8b17f1fa9a30679ccf9d534d0937d5b142d9c37142d5ee13244c68d4e03ea391317531628e2e8856d5ffdd2a96c037fab1bfcfddc201ab63115c27dcf67288d21108da30c007c5b4f9009aedcf39e2048a533a316b09dee64291941b234bcaf18df7c6664e66eb104e3d0f1e41d12ee03a6b90be339515af5bfa1200ba7dfe3c50a9e03487ab9c241c2710975c14f9282350ab33b3ac3dc935541c61acf8518b64137c3684a8741f224712b187b6d3dd4d78af608b6dce4ff7266960ca9425b150f8e2f5ad1f558bda792f284f9bbd1282b75cafd984ffa648c1c0c95060c1ed56ab76e5c86b99eceac1036a1de6903a6ecfafc8f202135fc98b946825c51248ef92c3702f834d6f6bce8cd004bb42adcd1a2f9c5d96dc38108a304c71c66172c17b573da4acac9b1bea69b80497e230dbda7323ae246893e33c9d78e21b06345c1943f38f57cabb4117e3c34022adf7468bed3c5b8a43e4732c31623d06729ec4a12</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">密码是什么呢？</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
         </div>
 
         
